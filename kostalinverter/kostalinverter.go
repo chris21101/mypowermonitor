@@ -2,8 +2,8 @@ package kostalinverter
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
-	"log"
 	"net/http"
 	"regexp"
 	"strings"
@@ -68,7 +68,8 @@ func FetchKostalDates() (string, error) {
 			case "gesamtenergie":
 				measure.Gesamtenergie = value
 			default:
-				log.Fatal("Falscher Tabellenwert gefunden. Nicht aktuell|Tagesenergie|Gesamtenergie ")
+				println("Falscher Tabellenwert gefunden. Nicht aktuell|Tagesenergie|Gesamtenergie ")
+				return "", errors.New("wrong columnname found with regexp")
 			}
 		}
 	}
@@ -76,8 +77,8 @@ func FetchKostalDates() (string, error) {
 	b, err := json.Marshal(measure)
 
 	if err != nil {
-		log.Fatal(err)
-
+		println(err)
+		return "", err
 	}
 	return string(b), nil
 }
