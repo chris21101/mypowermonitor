@@ -10,12 +10,13 @@ import (
 	"time"
 
 	"github.com/PuerkitoBio/goquery"
-	"github.com/go-ping/ping"
 )
 
 type measure_date struct {
-	Name  string
-	Value string
+	DateTime      string
+	Aktuell       string
+	Tagesenergie  string
+	Gesamtenergie string
 }
 
 func fetchKostalDates() (string, error) {
@@ -60,23 +61,24 @@ func fetchKostalDates() (string, error) {
 	})
 
 	var measure = measure_date{}
-	var allMeasure []measure_date
-	var measure_map = make(map[string][]measure_date)
 
+	measure.DateTime = formTimestamp
 	for i := 0; i < len(allValues); i++ {
 		if r.MatchString(allValues[i]) {
 			keyname := strings.ToLower(strings.TrimSpace(strings.TrimLeft(allValues[i], "\r\n")))
 			valuename := strings.TrimSpace(strings.TrimLeft(allValues[i+1], "\r\n"))
-
-			measure.Name = keyname
-			measure.Value = valuename
-
-			allMeasure = append(allMeasure, measure)
+			switch keyname {
+			case "aktuell":
+				measure.Aktuell = valuename
+			case "tagesenergie":
+				measure.Tagesenergie = valuename
+			case "gesamtenergie":
+				measure.Gesamtenergie = valuename
+			}
 		}
 	}
 
-	measure_map[formTimestamp] = allMeasure
-	b, err := json.Marshal(measure_map)
+	b, err := json.Marshal(measure)
 
 	if err != nil {
 		log.Fatal(err)
@@ -85,40 +87,16 @@ func fetchKostalDates() (string, error) {
 	return string(b), nil
 }
 
-func pinging() {
-	pinger, err := ping.NewPinger("192.168.50.238")
-	timeout := time.Second * 10
-	interval := time.Second
-	if err != nil {
-		fmt.Println(err)
-
-	} else {
-		pinger.SetPrivileged(true)
-		pinger.Interval = interval
-		pinger.Timeout = timeout
-		pinger.Count = 1
-		err = pinger.Run() // Blocks until finished.
-		if err != nil {
-			fmt.Println(err)
-		} else {
-			stats := pinger.Statistics() // get send/receive/duplicate/rtt stats
-			fmt.Println(stats)
-		}
-	}
-}
-
 func main() {
 	var j = 0
 	for {
 		jDate, err := fetchKostalDates()
 		if err != nil {
 			fmt.Println(err)
-			pinging()
 		}
 
 		j++
 		fmt.Printf("%d : %s\n", j, jDate)
 		time.Sleep(2 * time.Second)
-		pinging()
 	}
 }
