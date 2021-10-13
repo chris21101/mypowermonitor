@@ -1,4 +1,4 @@
-package main
+package kostalinverter
 
 import (
 	"encoding/json"
@@ -12,14 +12,7 @@ import (
 	"github.com/PuerkitoBio/goquery"
 )
 
-type measure_date struct {
-	DateTime      string
-	Aktuell       string
-	Tagesenergie  string
-	Gesamtenergie string
-}
-
-func fetchKostalDates() (string, error) {
+func FetchKostalDates() (string, error) {
 	r, _ := regexp.Compile("aktuell|Tagesenergie|Gesamtenergie")
 	client := http.Client{Timeout: 10 * time.Second}
 
@@ -66,14 +59,16 @@ func fetchKostalDates() (string, error) {
 	for i := 0; i < len(allValues); i++ {
 		if r.MatchString(allValues[i]) {
 			keyname := strings.ToLower(strings.TrimSpace(strings.TrimLeft(allValues[i], "\r\n")))
-			valuename := strings.TrimSpace(strings.TrimLeft(allValues[i+1], "\r\n"))
+			value := strings.TrimSpace(strings.TrimLeft(allValues[i+1], "\r\n"))
 			switch keyname {
 			case "aktuell":
-				measure.Aktuell = valuename
+				measure.Aktuell = value
 			case "tagesenergie":
-				measure.Tagesenergie = valuename
+				measure.Tagesenergie = value
 			case "gesamtenergie":
-				measure.Gesamtenergie = valuename
+				measure.Gesamtenergie = value
+			default:
+				log.Fatal("Falscher Tabellenwert gefunden. Nicht aktuell|Tagesenergie|Gesamtenergie ")
 			}
 		}
 	}
@@ -85,18 +80,4 @@ func fetchKostalDates() (string, error) {
 
 	}
 	return string(b), nil
-}
-
-func main() {
-	var j = 0
-	for {
-		jDate, err := fetchKostalDates()
-		if err != nil {
-			fmt.Println(err)
-		}
-
-		j++
-		fmt.Printf("%d : %s\n", j, jDate)
-		time.Sleep(2 * time.Second)
-	}
 }
