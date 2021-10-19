@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"net/http"
 	"regexp"
+	"strconv"
 	"strings"
 	"time"
 
@@ -56,19 +57,32 @@ func FetchKostalDates() (string, error) {
 	var measure = measure_date{}
 
 	measure.DateTime = formTimestamp
+	measure.MeasureType = "KOSTAL"
 	for i := 0; i < len(allValues); i++ {
 		if r.MatchString(allValues[i]) {
 			keyname := strings.ToLower(strings.TrimSpace(strings.TrimLeft(allValues[i], "\r\n")))
 			value := strings.TrimSpace(strings.TrimLeft(allValues[i+1], "\r\n"))
 			switch keyname {
 			case "aktuell":
-				measure.Aktuell = value
+				if s, err := strconv.ParseFloat(value, 64); err == nil {
+					measure.Aktuell = s
+				} else {
+					measure.Aktuell = 0
+				}
 			case "tagesenergie":
-				measure.Tagesenergie = value
+				if s, err := strconv.ParseFloat(value, 64); err == nil {
+					measure.Tagesenergie = s
+				} else {
+					measure.Tagesenergie = 0
+				}
 			case "gesamtenergie":
-				measure.Gesamtenergie = value
+				if s, err := strconv.ParseFloat(value, 64); err == nil {
+					measure.Gesamtenergie = s
+				} else {
+					measure.Tagesenergie = 0
+				}
 			default:
-				println("Falscher Tabellenwert gefunden. Nicht aktuell|Tagesenergie|Gesamtenergie ")
+				println("Wrong columnname found. Not in (aktuell|Tagesenergie|Gesamtenergie) ")
 				return "", errors.New("wrong columnname found with regexp")
 			}
 		}

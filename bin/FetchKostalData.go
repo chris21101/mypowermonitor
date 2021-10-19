@@ -17,6 +17,6 @@ func main() {
 
 		j++
 		fmt.Printf("%d : %s\n", j, jDate)
-		time.Sleep(2 * time.Second)
+		time.Sleep(1 * time.Second)
 	}
 }
