@@ -1,6 +1,6 @@
 package kostalinverter
 
-type measure_date struct {
+type MeasureDate struct {
 	DateTime      string  `json:"datetime"`
 	MeasureType   string  `json:"measuretype"`
 	Aktuell       float64 `json:"actualenergie"`

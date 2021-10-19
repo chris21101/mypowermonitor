@@ -1,7 +1,6 @@
 package kostalinverter
 
 import (
-	"encoding/json"
 	"errors"
 	"fmt"
 	"net/http"
@@ -13,14 +12,15 @@ import (
 	"github.com/PuerkitoBio/goquery"
 )
 
-func FetchKostalDates() (string, error) {
+func FetchKostalDates() (MeasureDate, error) {
+	var measure = MeasureDate{}
 	r, _ := regexp.Compile("aktuell|Tagesenergie|Gesamtenergie")
 	client := http.Client{Timeout: 10 * time.Second}
 
 	req, err := http.NewRequest(http.MethodGet, "http://192.168.50.238", http.NoBody)
 	if err != nil {
 		println(err)
-		return "", err
+		return measure, err
 	}
 
 	req.SetBasicAuth("pvserver", "pvwr")
@@ -33,7 +33,7 @@ func FetchKostalDates() (string, error) {
 	res, err := client.Do(req)
 	if err != nil {
 		fmt.Printf("%s : %s\n", formTimestamp, err)
-		return "", err
+		return measure, err
 	}
 	defer res.Body.Close()
 
@@ -41,7 +41,7 @@ func FetchKostalDates() (string, error) {
 
 	if err != nil {
 		println(err)
-		return "", err
+		return measure, err
 	}
 	var allValues []string
 
@@ -53,8 +53,6 @@ func FetchKostalDates() (string, error) {
 		}
 		j++
 	})
-
-	var measure = measure_date{}
 
 	measure.DateTime = formTimestamp
 	measure.MeasureType = "KOSTAL"
@@ -83,16 +81,10 @@ func FetchKostalDates() (string, error) {
 				}
 			default:
 				println("Wrong columnname found. Not in (aktuell|Tagesenergie|Gesamtenergie) ")
-				return "", errors.New("wrong columnname found with regexp")
+				return measure, errors.New("wrong columnname found with regexp")
 			}
 		}
 	}
 
-	b, err := json.Marshal(measure)
-
-	if err != nil {
-		println(err)
-		return "", err
-	}
-	return string(b), nil
+	return measure, nil
 }
