@@ -15,9 +15,13 @@ import (
 func FetchKostalDates() (MeasureDate, error) {
 	var measure = MeasureDate{}
 	r, _ := regexp.Compile("aktuell|Tagesenergie|Gesamtenergie")
-	client := http.Client{Timeout: 10 * time.Second}
+	client := &http.Client{
+		Timeout: 5 * time.Second,
+	}
 
 	req, err := http.NewRequest(http.MethodGet, "http://192.168.50.238", http.NoBody)
+	req.Close = true
+
 	if err != nil {
 		println(err)
 		return measure, err
@@ -31,6 +35,7 @@ func FetchKostalDates() (MeasureDate, error) {
 		t.Hour(), t.Minute(), t.Second())
 
 	res, err := client.Do(req)
+
 	if err != nil {
 		fmt.Printf("%s : %s\n", formTimestamp, err)
 		return measure, err
