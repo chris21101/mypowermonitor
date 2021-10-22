@@ -8,22 +8,14 @@ import (
 	"time"
 
 	"example.com/kostalinverter/kostalinverter"
+	"example.com/kostalinverter/power_util"
 )
 
 func main() {
 	var j = 0
 	var counter0 int = 0
 	for {
-		/*
-			type MeasureDate struct {
-				DateTime      string  `json:"datetime"`
-				MeasureType   string  `json:"measuretype"`
-				Aktuell       float64 `json:"actualenergie"`
-				Tagesenergie  float64 `json:"dailyenergie"`
-				Gesamtenergie float64 `json:"totalenergie"`
-			}
-		*/
-		mDate, err := kostalinverter.FetchKostalDates()
+		mDate, err := kostalinverter.FetchKostalValue()
 
 		if err != nil {
 			fmt.Println(err)
@@ -35,14 +27,14 @@ func main() {
 				println(err)
 			}
 
-			fmt.Printf("%d : %s\n", j, jstring)
+			fmt.Printf("%s - %d : %s\n", power_util.GetTimeStr(), j, jstring)
 			if mDate.Aktuell >= 0 && counter0 <= 10 {
 				if mDate.Aktuell == 0 && mDate.Tagesenergie > 0 {
 					counter0 = counter0 + 1
 				} else {
 					counter0 = 0
 				}
-				//Save the jstring over restfull service in the table kostal_inverter_rest
+				//Save the jstring over restfull service in the table inverter_rest
 				var urlstr = "https://h4de06bp7uxfolh-db202110152122.adb.eu-frankfurt-1.oraclecloudapps.com/ords/pm/rest-v1/inverter/"
 				client := &http.Client{
 					Timeout: 10 * time.Second,
@@ -52,9 +44,9 @@ func main() {
 				if err != nil {
 					fmt.Println(err)
 				}
-				fmt.Printf("%d : %s\n", j, resp.Status)
+				fmt.Printf("%s - %d : %s\n", power_util.GetTimeStr(), j, resp.Status)
 			} else {
-				fmt.Printf("%d : %s\n", j, "Not saved because actual_energy = 0 and daily_energie > 0")
+				fmt.Printf("%s - %d : %s\n", power_util.GetTimeStr(), j, "Not saved because actual_energy = 0 and daily_energie > 0")
 			}
 		}
 

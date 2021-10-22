@@ -12,7 +12,7 @@ import (
 	"github.com/PuerkitoBio/goquery"
 )
 
-func FetchKostalDates() (MeasureDate, error) {
+func FetchKostalValue() (MeasureDate, error) {
 	var measure = MeasureDate{}
 	r, _ := regexp.Compile("aktuell|Tagesenergie|Gesamtenergie")
 	client := &http.Client{
