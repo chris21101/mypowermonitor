@@ -12,6 +12,7 @@ import (
 
 func main() {
 	var j = 0
+	var counter0 int = 0
 	for {
 		/*
 			type MeasureDate struct {
@@ -35,9 +36,14 @@ func main() {
 			}
 
 			fmt.Printf("%d : %s\n", j, jstring)
-			if mDate.Aktuell > 0 {
+			if mDate.Aktuell >= 0 && counter0 <= 10 {
+				if mDate.Aktuell == 0 && mDate.Tagesenergie > 0 {
+					counter0 = counter0 + 1
+				} else {
+					counter0 = 0
+				}
 				//Save the jstring over restfull service in the table kostal_inverter_rest
-				var urlstr = "https://h4de06bp7uxfolh-db202110152122.adb.eu-frankfurt-1.oraclecloudapps.com/ords/powermonitor/kostal_inverter/"
+				var urlstr = "https://h4de06bp7uxfolh-db202110152122.adb.eu-frankfurt-1.oraclecloudapps.com/ords/pm/rest-v1/inverter/"
 				client := &http.Client{
 					Timeout: 10 * time.Second,
 				}
@@ -47,6 +53,8 @@ func main() {
 					fmt.Println(err)
 				}
 				fmt.Printf("%d : %s\n", j, resp.Status)
+			} else {
+				fmt.Printf("%d : %s\n", j, "Not saved because actual_energy = 0 and daily_energie > 0")
 			}
 		}
 
