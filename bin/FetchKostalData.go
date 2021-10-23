@@ -16,8 +16,8 @@ import (
 func main() {
 	newTokenRequest := oracleRestClient.OracleTokenRequest{
 		Aouthurl:     "https://h4de06bp7uxfolh-db202110152122.adb.eu-frankfurt-1.oraclecloudapps.com/ords/pm/oauth/token",
-		ClientID:     "HOG9HK859p3I4Uk5IKbF4Q..",
-		ClientSecret: "iNCuRgR0qmd-0poma_O2ew.."}
+		ClientID:     "eNC0tHpiENRcRIy6m1Py3w..",
+		ClientSecret: "rswBxuI877CbWEVyWua9Wg.."}
 
 	newOracleRequest := oracleRestClient.OraclePostRequest{
 		AccessUrl:  "https://h4de06bp7uxfolh-db202110152122.adb.eu-frankfurt-1.oraclecloudapps.com/ords/pm/rest-v1/inverter/",
@@ -71,7 +71,7 @@ func main() {
 			}
 			req.Close = true
 			req.Header.Set("Authorization", newOracleRequest.Oauthtoken)
-
+			req.Header.Set("Content-Type", "application/json")
 			resp, err := client.Do(req)
 
 			if err != nil {
