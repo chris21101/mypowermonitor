@@ -35,7 +35,6 @@ func main() {
 	fmt.Printf("%s - %s\n", power_util.GetTimeStr(), newOracleRequest.Oauthtoken)
 
 	var j = 0
-	//var counter0 int = 0
 
 	for {
 		mDate, err := kostalinverter.FetchKostalValue()
@@ -78,17 +77,18 @@ func main() {
 				fmt.Println(err)
 			}
 			fmt.Printf("%s - %d : %s\n", power_util.GetTimeStr(), j, resp.Status)
-
-			if resp.StatusCode == 401 {
+			//Error handling output from the database status code 400 and ERROR_MESSAGE or 401 unautherized
+			if resp.StatusCode == 400 {
+				fmt.Printf("%s - %d : %s\n", power_util.GetTimeStr(), j, resp.Header.Get("ERROR_MESSAGE"))
+			} else if resp.StatusCode == 401 {
+				//We need a new token now
 				newtoken, err := oracleRestClient.GetOracleDBtoken(newTokenRequest)
 				if err != nil {
 					log.Fatal(err)
 				}
-				fmt.Printf("%s - %s\n", power_util.GetTimeStr(), newtoken)
 				newOracleRequest.Oauthtoken = newtoken
 				fmt.Printf("%s - %s\n", power_util.GetTimeStr(), newOracleRequest.Oauthtoken)
 			}
-
 		}
 
 		if mDate.Aktuell == 0 {
