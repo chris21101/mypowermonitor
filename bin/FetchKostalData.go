@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"log"
 	"net/http"
 	"time"
@@ -72,9 +73,18 @@ func main() {
 			req.Header.Set("Authorization", newOracleRequest.Oauthtoken)
 			req.Header.Set("Content-Type", "application/json")
 			resp, err := client.Do(req)
-
 			if err != nil {
 				fmt.Println(err)
+				resp.Body.Close()
+			} else {
+
+				body, _ := ioutil.ReadAll(resp.Body)
+				resp.Body.Close()
+
+				if err != nil {
+					fmt.Println(err)
+					fmt.Println(body)
+				}
 			}
 			fmt.Printf("%s - %d : %s\n", power_util.GetTimeStr(), j, resp.Status)
 			//Error handling output from the database status code 400 and ERROR_MESSAGE or 401 unautherized
