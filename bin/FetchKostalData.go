@@ -75,7 +75,7 @@ func main() {
 			resp, err := client.Do(req)
 			if err != nil {
 				fmt.Println(err)
-				resp.Body.Close()
+				//resp.Body.Close()
 			} else {
 
 				body, _ := ioutil.ReadAll(resp.Body)
@@ -85,19 +85,20 @@ func main() {
 					fmt.Println(err)
 					fmt.Println(body)
 				}
-			}
-			fmt.Printf("%s - %d : %s\n", power_util.GetTimeStr(), j, resp.Status)
-			//Error handling output from the database status code 400 and ERROR_MESSAGE or 401 unautherized
-			if resp.StatusCode == 400 {
-				fmt.Printf("%s - %d : %s\n", power_util.GetTimeStr(), j, resp.Header.Get("ERROR_MESSAGE"))
-			} else if resp.StatusCode == 401 {
-				//We need a new token now
-				newtoken, err := oracleRestClient.GetOracleDBtoken(newTokenRequest)
-				if err != nil {
-					log.Fatal(err)
+
+				fmt.Printf("%s - %d : %s\n", power_util.GetTimeStr(), j, resp.Status)
+				//Error handling output from the database status code 400 and ERROR_MESSAGE or 401 unautherized
+				if resp.StatusCode == 400 {
+					fmt.Printf("%s - %d : %s\n", power_util.GetTimeStr(), j, resp.Header.Get("ERROR_MESSAGE"))
+				} else if resp.StatusCode == 401 {
+					//We need a new token now
+					newtoken, err := oracleRestClient.GetOracleDBtoken(newTokenRequest)
+					if err != nil {
+						log.Fatal(err)
+					}
+					newOracleRequest.Oauthtoken = newtoken
+					fmt.Printf("%s - %s\n", power_util.GetTimeStr(), newOracleRequest.Oauthtoken)
 				}
-				newOracleRequest.Oauthtoken = newtoken
-				fmt.Printf("%s - %s\n", power_util.GetTimeStr(), newOracleRequest.Oauthtoken)
 			}
 		}
 
