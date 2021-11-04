@@ -1,23 +1,31 @@
 package oracleRestClient
 
 import (
+	"bytes"
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
 	"net/http"
 	"net/url"
 	"strings"
+	"time"
 )
+
+type OracleRestJsonRequest struct {
+	Aouthurl      string
+	ClientID      string
+	ClientSecret  string
+	AccessUrl     string
+	Oauthtoken    string
+	Status        string
+	StatusCode    int
+	Error_message string
+	Body          []byte
+}
 
 type OracleTokenRequest struct {
 	Aouthurl     string `json:"aouthurl"`
 	ClientID     string `json:"client_id"`
 	ClientSecret string `json:"client_secret"`
-}
-
-type OraclePostRequest struct {
-	AccessUrl  string
-	Oauthtoken string
 }
 
 func GetOracleDBtoken(tr OracleTokenRequest) (string, error) {
@@ -43,7 +51,6 @@ func GetOracleDBtoken(tr OracleTokenRequest) (string, error) {
 
 	req, err := http.NewRequest("POST", tr.Aouthurl, body)
 	if err != nil {
-		fmt.Println(err)
 		return "", err
 	}
 	req.SetBasicAuth(tr.ClientID, tr.ClientSecret)
@@ -51,22 +58,72 @@ func GetOracleDBtoken(tr OracleTokenRequest) (string, error) {
 
 	resp, err := http.DefaultClient.Do(req)
 	if err != nil {
-		fmt.Println(err)
 		return "", err
 	}
 	defer resp.Body.Close()
 
 	bodyR, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		fmt.Println(err)
 		return "", err
 	}
 
 	err = json.Unmarshal(bodyR, &r1)
 	if err != nil {
-		fmt.Println(err)
 		return "", err
 	}
-	//fmt.Println("Bearer " + r1.Access_token)
 	return "Bearer " + r1.Access_token, nil
+}
+
+func (r *OracleRestJsonRequest) SaveJsonOracleDB(jstring string) error {
+	newTokenRequest := OracleTokenRequest{
+		Aouthurl:     r.Aouthurl,
+		ClientID:     r.ClientID,
+		ClientSecret: r.ClientSecret,
+	}
+
+	if r.Oauthtoken == "" {
+		newtoken, err := GetOracleDBtoken(newTokenRequest)
+		if err != nil {
+			return err
+		}
+		r.Oauthtoken = newtoken
+	}
+	client := &http.Client{
+		Timeout: 10 * time.Second,
+	}
+
+	req, err := http.NewRequest(http.MethodPost, r.AccessUrl, bytes.NewBuffer([]byte(jstring)))
+
+	if err != nil {
+		return err
+	}
+	req.Close = true
+	req.Header.Set("Authorization", r.Oauthtoken)
+	req.Header.Set("Content-Type", "application/json")
+	resp, err := client.Do(req)
+	if err != nil {
+		return err
+	}
+
+	defer resp.Body.Close()
+	r.Status = resp.Status
+	r.StatusCode = resp.StatusCode
+	r.Error_message = resp.Header.Get("ERROR_MESSAGE")
+
+	body, _ := ioutil.ReadAll(resp.Body)
+
+	if err != nil {
+		r.Body = body
+		return err
+	}
+
+	if resp.StatusCode == 401 {
+		//We need a new token now
+		newtoken, err := GetOracleDBtoken(newTokenRequest)
+		if err != nil {
+			return err
+		}
+		r.Oauthtoken = newtoken
+	}
+	return nil
 }
