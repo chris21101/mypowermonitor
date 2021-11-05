@@ -10,11 +10,13 @@ import (
 )
 
 func main() {
+	//All needed for the last_reading method from api.discovergy.com
 	method := http.MethodGet
 	baseurl := "https://api.discovergy.com/public/v1/last_reading"
 	meterId := "345598f062f64a5196b556d5d2a50746"
 	fields := "energy,energyOut,power"
 
+	// Genereated with postman collection 02-Discovergy
 	auth := myoauth.OAuth1{
 		ConsumerKey:    "k0klr0gi2676vrqnq0tgbikns8",
 		ConsumerSecret: "ou51lpns3q1985gpmbnjqb8qll",
@@ -29,23 +31,26 @@ func main() {
 	})
 
 	req, _ := http.NewRequest(method, baseurl, nil)
-
+	// The header comes from the postman app
 	req.Header.Set("Authorization", authHeader)
 	req.Header.Set("Accept", "*/*")
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Connection", "keep-alive")
 
-	//build the complete url
+	// Build the complete url
 	q := url.Values{}
 	q.Add("meterId", meterId)
 	q.Add("fields", fields)
 	req.URL.RawQuery = q.Encode()
 
+	// Now the actual http get request
 	if res, err := http.DefaultClient.Do(req); err == nil {
 		defer res.Body.Close()
 		fmt.Println(res.Status)
 		body, _ := ioutil.ReadAll(res.Body)
 		bodyString := string(body)
+		//Expected output:
+		//{"time":1636152869126,"values":{"energyOut":119411587467000,"energy":138376348839000,"power":344460}}
 		fmt.Println(bodyString)
 	}
 
