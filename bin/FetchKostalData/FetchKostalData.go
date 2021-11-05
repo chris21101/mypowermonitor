@@ -46,7 +46,6 @@ func main() {
 			if oracleRequest.StatusCode == 400 {
 				fmt.Printf("%s - %d : %s\n", power_util.GetTimeStr(), j, oracleRequest.Error_message)
 			} else if oracleRequest.StatusCode == 401 {
-				//We fetch a new token
 				fmt.Printf("%s - %s\n", power_util.GetTimeStr(), "Request a new token")
 				fmt.Printf("%s - %s\n", power_util.GetTimeStr(), oracleRequest.Oauthtoken)
 			} else {

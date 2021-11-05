@@ -1,0 +1,131 @@
+Client registration:
+Obtain request token:
+{
+    "key": "k0klr0gi2676vrqnq0tgbikns8",
+    "secret": "ou51lpns3q1985gpmbnjqb8qll",
+    "owner": "MyPowerMonitor",
+    "attributes": {},
+    "principal": null
+}
+
+Obtain request token:
+Aouth1:
+Signature Method: HMAC-SHA1
+Consumer Key: k0klr0gi2676vrqnq0tgbikns8
+Consumer  Secret: ou51lpns3q1985gpmbnjqb8qll
+
+--OAuth authorization API responses are URLEncoded rather than JSON as mandated by the standard.
+oauth_token=f23d09d358b848899c1a5e2786f72b26&oauth_token_secret=87dc1fdeefae4f14b2c03c4a75fb12f3&oauth_callback_confirmed=true
+
+Authorize request token:
+GET https://api.discovergy.com/public/v1/oauth1/authorize?oauth_token=f23d09d358b848899c1a5e2786f72b26&email=christian@familie-blank.de&password=xxxxx
+
+Response:
+oauth_verifier=7d8c45296c1b453e9f869179a0f4100e
+
+Obtain access token:
+POST https://api.discovergy.com/public/v1/oauth1/access_token
+  Accept: text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2
+  Authorization: OAuth
+    oauth_verifier="7d8c45296c1b453e9f869179a0f4100e",
+    oauth_nonce="8f9150d1-62f0-4253-a922-bc0ed1268473",
+    oauth_signature="8Hq4aI1RNmVQcHTeCi%2Fgp5GyqRM%3D",
+    oauth_token="f23d09d358b848899c1a5e2786f72b26",
+    oauth_consumer_key="k0klr0gi2676vrqnq0tgbikns8",
+    oauth_signature_method="HMAC-SHA1",
+    oauth_version="1.0",
+    oauth_timestamp="1467792887"
+token_secrte: 87dc1fdeefae4f14b2c03c4a75fb12f3
+consumer secret: ou51lpns3q1985gpmbnjqb8qll
+response:
+    oauth_token=86dcc4990f72403e8ba269a70eac2cc8&oauth_token_secret=8c9cdf9e8c8f495a8d5c6fd217bd7185
+
+//Add add authorization data to "header"
+GET /public/v1/meters
+  Accept: text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2
+  Authorization: OAuth
+    oauth_nonce="ca154e4b-c5b6-438e-92ad-2d143591995e",
+    oauth_signature="Z2Bn6QkeAqSpWGSHKDaOdLiKwXM%3D",
+    oauth_token="86dcc4990f72403e8ba269a70eac2cc8",
+    oauth_consumer_key="k0klr0gi2676vrqnq0tgbikns8",
+    oauth_signature_method="HMAC-SHA1",
+    oauth_version="1.0",
+    oauth_timestamp="1467792887"    
+
+Response:
+[
+    {
+        "meterId": "345598f062f64a5196b556d5d2a50746",
+        "manufacturerId": "ESY",
+        "serialNumber": "60670639",
+        "fullSerialNumber": "1ESY1160670639",
+        "printedFullSerialNumber": "1ESY1160670639",
+        "location": {
+            "street": "Fichtenweg",
+            "streetNumber": "2",
+            "zip": "22962",
+            "city": "Siek",
+            "country": "DE"
+        },
+        "administrationNumber": "DE0005352296200000000000001027734",
+        "type": "ESY",
+        "measurementType": "ELECTRICITY",
+        "loadProfileType": "SLP",
+        "scalingFactor": 1,
+        "currentScalingFactor": 1,
+        "voltageScalingFactor": 1,
+        "internalMeters": 1,
+        "firstMeasurementTime": 1513071921634,
+        "lastMeasurementTime": 1636114049550
+    }
+]
+
+
+{
+  "time": 1636114439550,
+  "values": {
+    "energyOut": 119403048741000, // Zählerstand ins Netz (Überschuß)
+    "energy": 138323643945000, // Zählerstand Bezug
+    "power": -481650 //Aktueller Pfeil - bedeutet ins Netz 
+  }
+}
+
+{
+    "time": 1636137447182,
+    "values": {
+        "power": 363310,              // Summe: Verbrauch-Erzeugung=Power  Verbrauch=Power+Erzeugung
+        "energyOut": 119411587467000,
+        "power3": 125590,
+        "power1": 113560,
+        "energy": 138356174905000,
+        "power2": 124160
+    }
+}
+
+curl https://api.tumblr.com/v2/user/dashboard?type=quote /
+-H 'Authorization: OAuth oauth_consumer_key="Re00jA4IJDxOnUSK", oauth_token="DT3agQyx5gv37saK", oauth_nonce="56354dc2d3380", oauth_timestamp="1446333890", oauth_signature_method="HMAC-SHA1", oauth_version="1.0", oauth_signature="%2FSdvxUkWh6uUAGoa2y3idefPWCM%3D"'
+
+
+OAuth oauth_consumer_key="k0klr0gi2676vrqnq0tgbikns8", oauth_nonce="BpLnfgDsc2WD8F2qNfHK5a84jjJkwzDkh9h2fhfUVuS9jZ8u", oauth_signature="3QDY4x73eF7AF6ykYX6nhXauO38%3D", oauth_signature_method="HMAC-SHA1", oauth_timestamp="1636143885", oauth_token="86dcc4990f72403e8ba269a70eac2cc8", oauth_version="1.0"
+
+
+
+	//Postman
+	OAuth 
+	 oauth_consumer_key="k0klr0gi2676vrqnq0tgbikns8"
+	,oauth_token="86dcc4990f72403e8ba269a70eac2cc8"
+	,oauth_signature_method="HMAC-SHA1"
+	,oauth_timestamp="1636147068"
+	,oauth_nonce="Viqb7fNMlM2"
+	,oauth_version="1.0"
+	,oauth_signature="4fXjbIpFdTfLm9ySMop87TXvJWc="
+
+	OAuth 
+	 oauth_consumer_key="k0klr0gi2676vrqnq0tgbikns8"
+	,oauth_token="86dcc4990f72403e8ba269a70eac2cc8"
+	,oauth_signature_method="HMAC-SHA1" 
+	,oauth_timestamp="1636146686"
+	,oauth_nonce="BpLnfgDsc2WD8F2qNfHK5a84jjJkwzDkh9h2fhfUVuS9jZ8u"
+	,oauth_version="1.0"
+	,oauth_signature="eJBBHG6nw%2B8VjFoBMwJylFjQkW0%3D"
+	

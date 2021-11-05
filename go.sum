@@ -6,6 +6,8 @@ github.com/go-ping/ping v0.0.0-20210911151512-381826476871 h1:wtjTfjwAR/BYYMJ+QO
 github.com/go-ping/ping v0.0.0-20210911151512-381826476871/go.mod h1:xIFjORFzTxqIV/tDVGO4eDy/bLuSyawEeojSm3GfRGk=
 github.com/google/uuid v1.2.0 h1:qJYtXnJRWmpe7m/3XlyhrsLrEURqHRM2kxzoxXqyUDs=
 github.com/google/uuid v1.2.0/go.mod h1:TIyPZe4MgqvfeYDBFedMoGGpEw/LqOeaOT+nhxU+yHo=
+github.com/klaidas/go-oauth1 v0.0.0-20190306224042-169193bf805e h1:EpTVRugMf9escJiIIoXwLoDAoIizgoMnrB4HkF6ezEU=
+github.com/klaidas/go-oauth1 v0.0.0-20190306224042-169193bf805e/go.mod h1:XiDW+xfKcphjyGVNIa1BBKIolcFUEPirbszD06JeJMc=
 golang.org/x/net v0.0.0-20180218175443-cbe0f9307d01/go.mod h1:mL1N/T3taQHkDXs73rZJwtUhF3w3ftmwwsq0BUmARs4=
 golang.org/x/net v0.0.0-20210316092652-d523dce5a7f4/go.mod h1:RBQZq4jEuRlivfhVLdyRGr576XBO4/greRjx4P4O3yc=
 golang.org/x/net v0.0.0-20210614182718-04defd469f4e h1:XpT3nA5TvE525Ne3hInMh6+GETgn27Zfm9dxsThnX2Q=
