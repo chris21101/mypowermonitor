@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"time"
 
-	"example.com/kostalinverter/kostalinverter"
-	"example.com/kostalinverter/oracleRestClient"
-	"example.com/kostalinverter/power_util"
+	"example.com/mypowermonitor/kostalinverter"
+	"example.com/mypowermonitor/oracleRestClient"
+	"example.com/mypowermonitor/power_util"
 )
 
 func main() {

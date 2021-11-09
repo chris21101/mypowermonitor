@@ -1,4 +1,4 @@
-module example.com/kostalinverter
+module example.com/mypowermonitor
 
 go 1.16
 

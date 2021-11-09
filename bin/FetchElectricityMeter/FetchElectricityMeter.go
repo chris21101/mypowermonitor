@@ -6,22 +6,23 @@ import (
 	"net/http"
 	"net/url"
 
-	"example.com/kostalinverter/myoauth"
+	"example.com/mypowermonitor/myoauth"
 )
 
 func main() {
 	//All needed for the last_reading method from api.discovergy.com
 	method := http.MethodGet
 	baseurl := "https://api.discovergy.com/public/v1/last_reading"
+	//Parameters
 	meterId := "345598f062f64a5196b556d5d2a50746"
 	fields := "energy,energyOut,power"
 
 	// Genereated with postman collection 02-Discovergy
 	auth := myoauth.OAuth1{
-		ConsumerKey:    "k0klr0gi2676vrqnq0tgbikns8",
-		ConsumerSecret: "ou51lpns3q1985gpmbnjqb8qll",
-		AccessToken:    "86dcc4990f72403e8ba269a70eac2cc8",
-		AccessSecret:   "8c9cdf9e8c8f495a8d5c6fd217bd7185",
+		ConsumerKey:    "cksuirhcnrfr2ti43pvi4aq641",
+		ConsumerSecret: "d759m7nvomdl22r46c13hpb1a",
+		AccessToken:    "1d9f3ac0bc8c4ca198a10fede98199b4",
+		AccessSecret:   "c6d6383a75744d1fb45054806f15f41f",
 	}
 
 	// Methode + Baseurl + Parameter need for the signing string ( show myoauth signatureBase)
