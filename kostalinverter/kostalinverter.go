@@ -19,7 +19,7 @@ func FetchKostalValue() (MeasureDate, error) {
 		Timeout: 5 * time.Second,
 	}
 
-	req, err := http.NewRequest(http.MethodGet, "http://192.168.50.238", http.NoBody)
+	req, err := http.NewRequest(http.MethodGet, "http://192.168.178.27", http.NoBody)
 	req.Close = true
 
 	if err != nil {

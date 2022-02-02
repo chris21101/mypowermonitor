@@ -102,6 +102,25 @@ Response:
     }
 }
 
+//20211109
+01- Response
+{
+    "key": "cksuirhcnrfr2ti43pvi4aq641",
+    "secret": "d759m7nvomdl22r46c13hpb1a",
+    "owner": "MyPowerMonitor",
+    "attributes": {},
+    "principal": null
+}
+
+02 Response
+oauth_token=0d6b8f08a8614400954d4a528f891f1b&oauth_token_secret=5ef05970153641c8a6f32f4f6f2cc953&oauth_callback_confirmed=true
+
+03 Response
+oauth_verifier=3d99cb78b486435da0a55ba5c8a3932d
+
+04 Response
+oauth_token=1d9f3ac0bc8c4ca198a10fede98199b4&oauth_token_secret=c6d6383a75744d1fb45054806f15f41f
+
 curl https://api.tumblr.com/v2/user/dashboard?type=quote /
 -H 'Authorization: OAuth oauth_consumer_key="Re00jA4IJDxOnUSK", oauth_token="DT3agQyx5gv37saK", oauth_nonce="56354dc2d3380", oauth_timestamp="1446333890", oauth_signature_method="HMAC-SHA1", oauth_version="1.0", oauth_signature="%2FSdvxUkWh6uUAGoa2y3idefPWCM%3D"'
 

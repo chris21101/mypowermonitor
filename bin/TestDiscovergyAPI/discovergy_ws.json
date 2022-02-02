@@ -1,0 +1,13 @@
+{
+    "ClientName": "discovergy_ws",
+    "Filename": "",
+    "BaseUrl": "https://api.discovergy.com",
+    "ClientRegistrationUrl": "/public/v1/oauth1/consumer_token",
+    "ConsumerKey": "jdrt364fi1s502tfh0j17hq2jb",
+    "ConsumerSecret": "lalnfdpbspbfudegt35bql4ool",
+    "RequestTokenUrl": "/public/v1/oauth1/request_token",
+    "Oauth_token1": "",
+    "Oauth_token_secret1": "",
+    "AuthorizeURL": "https://api.discovergy.com/public/v1/oauth1/authorize",
+    "Oauth_verifier": ""
+}
