@@ -1,0 +1,14 @@
+{
+    "ClientName": "discovergy_ws",
+    "Filename": "config_discovergy_ws.json",
+    "BaseUrl": "https://api.discovergy.com",
+    "MeterId": "345598f062f64a5196b556d5d2a50746",
+    "ReadingFealds": "energy,energyOut,power",
+    "ClientRegistrationUrl": "/public/v1/oauth1/consumer_token",
+    "RequestTokenUrl": "/public/v1/oauth1/request_token",
+    "AuthorizeURL": "/public/v1/oauth1/authorize",
+    "AccessTokenURL": "/public/v1/oauth1/access_token",
+    "LastReadUrl": "/public/v1/last_reading",
+    "ConsumerKey": "tufivkpk2ftsh4ltd70krbbdo7",
+    "ConsumerSecret": "mgpji3dakblqo1nhuv51mudoi"
+}
