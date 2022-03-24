@@ -29,3 +29,21 @@ type DiscovergyAPI struct {
 	Oauth_AccessSecret  string `json:"Oauth_AccessSecret"`
 	Oauth_Verifier      string `json:"Oauth_Verifier"`
 }
+
+type DiscovergyEnergy struct {
+	EnergyOut int64 `json:"energyOut"`
+	Energy    int64 `json:"energy"`
+	Power     int64 `json:"power"`
+}
+
+type DiscovergyReads struct {
+	MeasureTime int64 `json:"time"`
+	Values      DiscovergyEnergy
+}
+
+type DiscovergyResult struct {
+	MeasureTime string `json:"measure_time"`
+	EnergyOut   int64  `json:"energyout"`
+	Energy      int64  `json:"energy"`
+	Power       int64  `json:"power"`
+}

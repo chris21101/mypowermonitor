@@ -1,10 +1,14 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"os"
+	"strconv"
+	"time"
 
 	"example.com/mypowermonitor/discovergy"
+	"example.com/mypowermonitor/power_util"
 )
 
 func main() {
@@ -15,6 +19,13 @@ func main() {
 	_ = disapi.CheckOsEnv()
 
 	/*
+		Requires the following variables
+		On Powershell:
+		*  $Env:ClientName = "discovergy_ws"
+		Discovergy Account:
+		*  $Env:DiscovergyEmail = "fffffffff@mail.de"
+		*  $Env:DiscovergyPasswd = "********"
+		Bash use export
 		Needs config file config_<ClientName>.json in the root directory
 		https://api.discovergy.com/docs/#/OAuth1
 		Example config_discovergy_ws.json
@@ -54,4 +65,45 @@ func main() {
 		os.Exit(3)
 	}
 
+	for {
+		var measures discovergy.DiscovergyReads
+		var disresults discovergy.DiscovergyResult
+		fmt.Printf("%s - %s\n", power_util.GetTimeStr(), "Start new reading")
+		result, httpStatusCode, err := disapi.GetLastRead()
+		strHttpStatusCode := strconv.Itoa(httpStatusCode)
+		fmt.Printf("%s - %s\n", power_util.GetTimeStr(), "HTTP StatusCode = "+strHttpStatusCode)
+		if err != nil {
+			fmt.Printf("%s - %s\n", power_util.GetTimeStr(), err)
+			time.Sleep(time.Duration(60) * time.Second)
+		} else {
+			//Expected output:
+			//{"time":1636152869126,"values":{"energyOut":119411587467000,"energy":138376348839000,"power":344460}}
+			//fmt.Println(bodyString)
+			Data := []byte(result)
+
+			err := json.Unmarshal(Data, &measures)
+
+			if err != nil {
+				fmt.Println(err)
+			}
+			tUnix := measures.MeasureTime / int64(time.Microsecond)
+			t := time.Unix(tUnix, 0)
+
+			formTimestamp := fmt.Sprintf("%d-%02d-%02dT%02d:%02d:%02d",
+				t.Year(), t.Month(), t.Day(),
+				t.Hour(), t.Minute(), t.Second())
+
+			fmt.Printf("%s - Datum: %s\n", power_util.GetTimeStr(), formTimestamp)
+			disresults.MeasureTime = formTimestamp
+			disresults.Energy = measures.Values.Energy
+			disresults.EnergyOut = measures.Values.EnergyOut
+			disresults.Power = measures.Values.Power
+
+			jbytes, _ := json.Marshal(disresults)
+			jstring := string(jbytes)
+			fmt.Printf("%s - %s\n", power_util.GetTimeStr(), jstring)
+			time.Sleep(time.Duration(10) * time.Second)
+		}
+
+	}
 }

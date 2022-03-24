@@ -1,6 +1,13 @@
 package discovergy
 
 /*
+	Requires the following variables
+	On Powershell:
+	*  $Env:ClientName = "discovergy_ws"
+	Discovergy Account:
+	*  $Env:DiscovergyEmail = "fffffffff@mail.de"
+	*  $Env:DiscovergyPasswd = "********"
+	Bash use export
 	Needs config file config_<ClientName>.json in the root directory
 	https://api.discovergy.com/docs/#/OAuth1
 	Example config_discovergy_ws.json
@@ -25,8 +32,11 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
+	"net/http"
 	"net/url"
 	"os"
+
+	"example.com/mypowermonitor/myoauth"
 )
 
 func (api *DiscovergyAPI) CheckOsEnv() error {
@@ -38,7 +48,7 @@ func (api *DiscovergyAPI) CheckOsEnv() error {
 	}
 
 	if os.Getenv("DiscovergyEmail") == "" || os.Getenv("DiscovergyPasswd") == "" {
-		panic("Not set the Env Variable DiscovergyEmail or DiscovergyPasswd")
+		panic("Not set the Env Variable DiscovergyEmail or DiscovergyPasswd for the Discovergy Account")
 	}
 	return nil
 }
@@ -87,4 +97,51 @@ func (api *DiscovergyAPI) SaveToFile() error {
 		log.Fatal("Failed to generate json", err)
 	}
 	return nil
+}
+
+func (api *DiscovergyAPI) GetLastRead() (string, int, error) {
+	var auth myoauth.OAuth1
+	local_conf := api.Config
+
+	auth.ConsumerKey = local_conf.ConsumerKey
+	auth.ConsumerSecret = local_conf.ConsumerSecret
+	auth.AccessToken = api.Oauth_AccessToken
+	auth.AccessSecret = api.Oauth_AccessSecret
+	method := http.MethodGet
+	last_readurl := local_conf.BaseUrl + local_conf.LastReadUrl
+	// Methode + Baseurl + Parameter need for the signing string ( show myoauth signatureBase)
+	authHeader := auth.BuildOAuth1Header(method, last_readurl, map[string]string{
+		"meterId": local_conf.MeterId,
+		"fields":  local_conf.ReadingFealds,
+	})
+
+	req, _ := http.NewRequest(method, last_readurl, nil)
+	// The header comes from the postman app
+	req.Header.Set("Authorization", authHeader)
+	req.Header.Set("Accept", "*/*")
+	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("Connection", "keep-alive")
+
+	// Build the complete url
+	q := url.Values{}
+	q.Add("meterId", local_conf.MeterId)
+	q.Add("fields", local_conf.ReadingFealds)
+	req.URL.RawQuery = q.Encode()
+
+	// Now the actual http get request
+	if res, err := http.DefaultClient.Do(req); err == nil {
+		defer res.Body.Close()
+		resStatusCode := res.StatusCode
+		//fmt.Printf("%s - %s\n", power_util.GetTimeStr(), res.Status)
+		body, _ := ioutil.ReadAll(res.Body)
+		bodyString := string(body)
+		//Expected output:
+		//{"time":1636152869126,"values":{"energyOut":119411587467000,"energy":138376348839000,"power":344460}}
+		//fmt.Println(bodyString)
+		return bodyString, resStatusCode, nil
+	} else {
+		resStatusCode := res.StatusCode
+		return "ERROR", resStatusCode, err
+	}
+
 }

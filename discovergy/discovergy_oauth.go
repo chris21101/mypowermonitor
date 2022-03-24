@@ -84,6 +84,7 @@ func (api *DiscovergyAPI) config_oauth1() (oauth1.Config, error) {
 func (api *DiscovergyAPI) NewToken() error {
 
 	oauth1, _ := api.config_oauth1()
+
 	//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	//+ https://api.discovergy.com/docs/#/OAuth1/getConsumerCredentials
 	//+	Discovergy /oauth1/request_token Authorization Step 2
@@ -142,7 +143,7 @@ func (api *DiscovergyAPI) NewToken() error {
 	accessToken, accessSecret, err := oauth1.AccessToken(requestToken, requestSecret, api.Oauth_Verifier)
 
 	if err != nil {
-		println("TEST")
+		println("Error: oauth1.AccessToken ")
 		log.Fatal("Failed:  ", err)
 	}
 
