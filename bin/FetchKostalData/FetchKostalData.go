@@ -35,7 +35,7 @@ func main() {
 				fmt.Printf("%s - %s\n", power_util.GetTimeStr(), err)
 			}
 
-			fmt.Printf("%s - %d : %s\n", power_util.GetTimeStr(), j, jstring)
+			fmt.Printf("%s - %d run: %s\n", power_util.GetTimeStr(), j, jstring)
 
 			err = oracleRequest.SaveJsonOracleDB(jstring)
 

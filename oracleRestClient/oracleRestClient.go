@@ -109,7 +109,7 @@ func (r *OracleRestJsonRequest) SaveJsonOracleDB(jstring string) error {
 	r.Status = resp.Status
 	r.StatusCode = resp.StatusCode
 	r.Error_message = resp.Header.Get("ERROR_MESSAGE")
-
+	//fmt.Printf("%v\n", r)
 	body, _ := ioutil.ReadAll(resp.Body)
 
 	if err != nil {
