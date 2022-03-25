@@ -56,7 +56,7 @@ func main() {
 		if mDate.Aktuell == 0 {
 			time.Sleep(time.Duration(60) * time.Second)
 		} else {
-			time.Sleep(time.Duration(2) * time.Second)
+			time.Sleep(time.Duration(10) * time.Second)
 		}
 	}
 }

@@ -127,7 +127,7 @@ func main() {
 				fmt.Printf("%s - %s\n", power_util.GetTimeStr(), "Request a new token")
 				fmt.Printf("%s - %s\n", power_util.GetTimeStr(), oracleRequest.Oauthtoken)
 			} else {
-				fmt.Printf("%s - %d : %s\n", power_util.GetTimeStr(), j, oracleRequest.Status)
+				fmt.Printf("%s - %d : Save Oracle %s\n", power_util.GetTimeStr(), j, oracleRequest.Status)
 			}
 
 			//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
