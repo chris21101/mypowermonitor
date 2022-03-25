@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"example.com/mypowermonitor/discovergy"
+	"example.com/mypowermonitor/oracleRestClient"
 	"example.com/mypowermonitor/power_util"
 )
 
@@ -65,6 +66,8 @@ func main() {
 		os.Exit(3)
 	}
 
+	var j = 0
+
 	for {
 		var measures discovergy.DiscovergyReads
 		var disresults discovergy.DiscovergyResult
@@ -102,6 +105,32 @@ func main() {
 			jbytes, _ := json.Marshal(disresults)
 			jstring := string(jbytes)
 			fmt.Printf("%s - %s\n", power_util.GetTimeStr(), jstring)
+
+			//++++++++++++++++++++++++++++++++++++++ New Save to Oracle ++++++++++++++++++++
+			oracleRequest := oracleRestClient.OracleRestJsonRequest{
+				Aouthurl:     "https://h4de06bp7uxfolh-db202110152122.adb.eu-frankfurt-1.oraclecloudapps.com/ords/pm/oauth/token",
+				ClientID:     "eNC0tHpiENRcRIy6m1Py3w..",
+				ClientSecret: "rswBxuI877CbWEVyWua9Wg..",
+				AccessUrl:    "https://h4de06bp7uxfolh-db202110152122.adb.eu-frankfurt-1.oraclecloudapps.com/ords/pm/rest-v1/discovergy/",
+				Oauthtoken:   "",
+			}
+
+			err = oracleRequest.SaveJsonOracleDB(jstring)
+			j++
+			if err != nil {
+				fmt.Printf("%s - %s\n", power_util.GetTimeStr(), err)
+			}
+
+			if oracleRequest.StatusCode == 400 {
+				fmt.Printf("%s - %d : %s\n", power_util.GetTimeStr(), j, oracleRequest.Error_message)
+			} else if oracleRequest.StatusCode == 401 {
+				fmt.Printf("%s - %s\n", power_util.GetTimeStr(), "Request a new token")
+				fmt.Printf("%s - %s\n", power_util.GetTimeStr(), oracleRequest.Oauthtoken)
+			} else {
+				fmt.Printf("%s - %d : %s\n", power_util.GetTimeStr(), j, oracleRequest.Status)
+			}
+
+			//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 			time.Sleep(time.Duration(10) * time.Second)
 		}
 
