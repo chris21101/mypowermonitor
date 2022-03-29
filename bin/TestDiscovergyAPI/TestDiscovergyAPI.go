@@ -15,7 +15,7 @@ import (
 func main() {
 	fmt.Println("Start TestDiscovergyAPI")
 	var disapi discovergy.DiscovergyAPI
-
+	var oracleRequest oracleRestClient.OracleRestJsonRequest
 	//Needs Env "ClientName, DiscovergyEmail and DiscovergyPasswd"
 	_ = disapi.CheckOsEnv()
 
@@ -47,6 +47,21 @@ func main() {
 	*/
 	_ = disapi.ReadConfigFromFile()
 
+	/*
+		oracleRequest := oracleRestClient.OracleRestJsonRequest{
+			Aouthurl:     "https://h4de06bp7uxfolh-db202110152122.adb.eu-frankfurt-1.oraclecloudapps.com/ords/pm/oauth/token",
+			ClientID:     "eNC0tHpiENRcRIy6m1Py3w..",
+			ClientSecret: "rswBxuI877CbWEVyWua9Wg..",
+			AccessUrl:    "https://h4de06bp7uxfolh-db202110152122.adb.eu-frankfurt-1.oraclecloudapps.com/ords/pm/rest-v1/discovergy/",
+			Oauthtoken:   "",
+		}
+	*/
+
+	oracleRequest.AccessUrl = disapi.Config.OracleDB.AccessUrl
+	oracleRequest.Aouthurl = disapi.Config.OracleDB.Aouthurl
+	oracleRequest.ClientID = disapi.Config.OracleDB.ClientID
+	oracleRequest.ClientSecret = disapi.Config.OracleDB.ClientSecret
+
 	// Programm needs a ConsumerKey and ConsumerSecret
 	if len(disapi.Config.ConsumerKey) == 0 || len(disapi.Config.ConsumerSecret) == 0 {
 		err := disapi.ClientRegistration()
@@ -71,7 +86,7 @@ func main() {
 	for {
 		var measures discovergy.DiscovergyReads
 		var disresults discovergy.DiscovergyResult
-		fmt.Printf("%s - %s\n", power_util.GetTimeStr(), "Start new reading")
+		fmt.Printf("%s - %s\n", power_util.GetTimeStr(), "Start new reading: "+disapi.Config.ClientName)
 		result, httpStatusCode, err := disapi.GetLastRead()
 		strHttpStatusCode := strconv.Itoa(httpStatusCode)
 		fmt.Printf("%s - %s\n", power_util.GetTimeStr(), "HTTP StatusCode = "+strHttpStatusCode)
@@ -107,29 +122,25 @@ func main() {
 			fmt.Printf("%s - %s\n", power_util.GetTimeStr(), jstring)
 
 			//++++++++++++++++++++++++++++++++++++++ New Save to Oracle ++++++++++++++++++++
-			oracleRequest := oracleRestClient.OracleRestJsonRequest{
-				Aouthurl:     "https://h4de06bp7uxfolh-db202110152122.adb.eu-frankfurt-1.oraclecloudapps.com/ords/pm/oauth/token",
-				ClientID:     "eNC0tHpiENRcRIy6m1Py3w..",
-				ClientSecret: "rswBxuI877CbWEVyWua9Wg..",
-				AccessUrl:    "https://h4de06bp7uxfolh-db202110152122.adb.eu-frankfurt-1.oraclecloudapps.com/ords/pm/rest-v1/discovergy/",
-				Oauthtoken:   "",
-			}
 
 			err = oracleRequest.SaveJsonOracleDB(jstring)
+			//fmt.Printf("%v\n", oracleRequest)
 			j++
 			if err != nil {
-				fmt.Printf("%s - %s\n", power_util.GetTimeStr(), err)
-			}
-
-			if oracleRequest.StatusCode == 400 {
-				fmt.Printf("%s - %d : %s\n", power_util.GetTimeStr(), j, oracleRequest.Error_message)
-			} else if oracleRequest.StatusCode == 401 {
-				fmt.Printf("%s - %s\n", power_util.GetTimeStr(), "Request a new token")
-				fmt.Printf("%s - %s\n", power_util.GetTimeStr(), oracleRequest.Oauthtoken)
+				fmt.Printf("%s - Error: SaveJsonOracleDB() - %s\n", power_util.GetTimeStr(), err)
 			} else {
-				fmt.Printf("%s - %d : Save Oracle %s\n", power_util.GetTimeStr(), j, oracleRequest.Status)
-			}
 
+				if oracleRequest.StatusCode == 400 {
+					fmt.Printf("%s - %d :!! %s\n", power_util.GetTimeStr(), j, oracleRequest.Error_message)
+				} else if oracleRequest.StatusCode == 401 {
+					fmt.Printf("%s - %s\n", power_util.GetTimeStr(), "Request a new token")
+					fmt.Printf("%s - %s\n", power_util.GetTimeStr(), oracleRequest.Oauthtoken)
+				} else if oracleRequest.StatusCode == 503 {
+					fmt.Printf("%s - No Oracle Service: %s \n", power_util.GetTimeStr(), oracleRequest.Status)
+				} else {
+					fmt.Printf("%s - %d : SaveJsonOracleDB() Status: %s - StatusCode: %d \n", power_util.GetTimeStr(), j, oracleRequest.Status, oracleRequest.StatusCode)
+				}
+			}
 			//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 			time.Sleep(time.Duration(10) * time.Second)
 		}

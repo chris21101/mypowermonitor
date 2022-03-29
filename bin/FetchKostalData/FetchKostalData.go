@@ -33,23 +33,30 @@ func main() {
 			jstring := string(jbytes)
 			if err != nil {
 				fmt.Printf("%s - %s\n", power_util.GetTimeStr(), err)
-			}
-
-			fmt.Printf("%s - %d run: %s\n", power_util.GetTimeStr(), j, jstring)
-
-			err = oracleRequest.SaveJsonOracleDB(jstring)
-
-			if err != nil {
-				fmt.Printf("%s - %s\n", power_util.GetTimeStr(), err)
-			}
-
-			if oracleRequest.StatusCode == 400 {
-				fmt.Printf("%s - %d : %s\n", power_util.GetTimeStr(), j, oracleRequest.Error_message)
-			} else if oracleRequest.StatusCode == 401 {
-				fmt.Printf("%s - %s\n", power_util.GetTimeStr(), "Request a new token")
-				fmt.Printf("%s - %s\n", power_util.GetTimeStr(), oracleRequest.Oauthtoken)
 			} else {
-				fmt.Printf("%s - %d : %s\n", power_util.GetTimeStr(), j, oracleRequest.Status)
+
+				fmt.Printf("%s - %d run: %s\n", power_util.GetTimeStr(), j, jstring)
+
+				err = oracleRequest.SaveJsonOracleDB(jstring)
+
+				if err != nil {
+					fmt.Printf("%s - oracleRequest.SaveJsonOracleDB: - %s\n", power_util.GetTimeStr(), err)
+					fmt.Printf("%s - %d : %s\n", power_util.GetTimeStr(), j, oracleRequest.Error_message)
+					time.Sleep(time.Duration(120) * time.Second)
+				} else {
+
+					if oracleRequest.StatusCode == 400 {
+						fmt.Printf("%s - %d : %s\n", power_util.GetTimeStr(), j, oracleRequest.Error_message)
+					} else if oracleRequest.StatusCode == 401 {
+						fmt.Printf("%s - %s\n", power_util.GetTimeStr(), "Request a new token")
+						fmt.Printf("%s - %s\n", power_util.GetTimeStr(), oracleRequest.Oauthtoken)
+					} else if oracleRequest.StatusCode == 503 {
+						fmt.Printf("<<<<%s - %d : %s\n", power_util.GetTimeStr(), j, oracleRequest.Status)
+						time.Sleep(time.Duration(120) * time.Second)
+					} else {
+						fmt.Printf("%s - %d : SaveJsonOracleDB() Status: %s - StatusCode: %d \n", power_util.GetTimeStr(), j, oracleRequest.Status, oracleRequest.StatusCode)
+					}
+				}
 			}
 		}
 

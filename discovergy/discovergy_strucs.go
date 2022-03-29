@@ -13,6 +13,7 @@ type DiscovergyConfig struct {
 	LastReadUrl           string `json:"LastReadUrl"`
 	ConsumerKey           string `json:"ConsumerKey"`
 	ConsumerSecret        string `json:"ConsumerSecret"`
+	OracleDB              DiscovergyOracleDB
 }
 
 type ClientRegResponse struct {
@@ -46,4 +47,11 @@ type DiscovergyResult struct {
 	EnergyOut   int64  `json:"energyout"`
 	Energy      int64  `json:"energy"`
 	Power       int64  `json:"power"`
+}
+
+type DiscovergyOracleDB struct {
+	Aouthurl     string `json:"Aouthurl"`
+	ClientID     string `json:"ClientID"`
+	ClientSecret string `json:"ClientSecret"`
+	AccessUrl    string `json:"AccessUrl"`
 }
