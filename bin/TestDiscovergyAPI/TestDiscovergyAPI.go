@@ -87,12 +87,20 @@ func main() {
 		var measures discovergy.DiscovergyReads
 		var disresults discovergy.DiscovergyResult
 		fmt.Printf("%s - %s\n", power_util.GetTimeStr(), "Start new reading: "+disapi.Config.ClientName)
+
 		result, httpStatusCode, err := disapi.GetLastRead()
 		strHttpStatusCode := strconv.Itoa(httpStatusCode)
 		fmt.Printf("%s - %s\n", power_util.GetTimeStr(), "HTTP StatusCode = "+strHttpStatusCode)
 		if err != nil {
 			fmt.Printf("%s - %s\n", power_util.GetTimeStr(), err)
 			time.Sleep(time.Duration(60) * time.Second)
+		} else if httpStatusCode == 401 {
+			err := disapi.NewToken()
+			if err != nil {
+				fmt.Printf("Failed NewToken: %s \n", err)
+				time.Sleep(time.Duration(300) * time.Second)
+			}
+			continue
 		} else {
 			//Expected output:
 			//{"time":1636152869126,"values":{"energyOut":119411587467000,"energy":138376348839000,"power":344460}}
