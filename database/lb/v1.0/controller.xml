@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<databaseChangeLog
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.9.xsd">
+  <include file="./sequence/inverter_rest_seq2_sequence.xml" relativeToChangelogFile="true"/> 
+  <include file="./sequence/discovergy_rest_seq_sequence.xml" relativeToChangelogFile="true"/> 
+  <include file="./table/inverter_rest_table.xml" relativeToChangelogFile="true"/> 
+  <include file="./table/discovergy_rest_table.xml" relativeToChangelogFile="true"/> 
+  <include file="./index/inverter_rest_uk1_index.xml"  relativeToChangelogFile="true"/> 
+  <include file="./index/discovergy_rest_u1_index.xml" relativeToChangelogFile="true"/> 
+  <include file="./trigger/discaovergy_rest_pk_trg_trigger.xml" relativeToChangelogFile="true"/> 
+  <include file="./trigger/inverter_rest_trg2_trigger.xml" relativeToChangelogFile="true"/> 
+</databaseChangeLog> 
