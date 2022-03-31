@@ -5,7 +5,7 @@
 	xmlns:n0="http://www.oracle.com/xml/ns/dbchangelog-ext" 
 	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog 
 	http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.9.xsd">
-	<changeSet id="1b1f51e213f7e6cfe85f11e980633d3a97f3ab0c" author="(POWERMONITOR_DEV)-Generated" failOnError="false"    >
+	<changeSet id="4a7636ec5328f8b24e8bbfe8311efdabea20f718" author="(POWERMONITOR_DEV)-Generated" failOnError="false"    >
 		<n0:createOracleTrigger objectName="DISCAOVERGY_REST_PK_TRG" objectType="TRIGGER" ownerName="POWERMONITOR_DEV"   >
 			<n0:source><![CDATA[
   CREATE OR REPLACE EDITIONABLE TRIGGER "POWERMONITOR_DEV"."DISCAOVERGY_REST_PK_TRG" 
@@ -20,7 +20,8 @@ begin
 end;
 
 /
-ALTER TRIGGER "POWERMONITOR_DEV"."DISCAOVERGY_REST_PK_TRG" ENABLE]]></n0:source>
+/
+ALTER TRIGGER "POWERMONITOR_DEV"."DISCAOVERGY_REST_PK_TRG" ENABLE;]]></n0:source>
 		</n0:createOracleTrigger>
 	</changeSet>
 </databaseChangeLog>
