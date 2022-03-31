@@ -86,6 +86,7 @@ func main() {
 	for {
 		var measures discovergy.DiscovergyReads
 		var disresults discovergy.DiscovergyResult
+		disresults.ClientName = disapi.Config.ClientName
 		fmt.Printf("%s - %s\n", power_util.GetTimeStr(), "Start new reading: "+disapi.Config.ClientName)
 
 		result, httpStatusCode, err := disapi.GetLastRead()
@@ -131,7 +132,6 @@ func main() {
 			fmt.Printf("%s - %s\n", power_util.GetTimeStr(), jstring)
 
 			//++++++++++++++++++++++++++++++++++++++ New Save to Oracle ++++++++++++++++++++
-
 			err = oracleRequest.SaveJsonOracleDB(jstring)
 			//fmt.Printf("%v\n", oracleRequest)
 			j++

@@ -1,2 +1,3 @@
 bin/FetchElectricityMeter/FetchElectricityMeter.exe
 /bin/TestDiscovergyAPI/config_discovergy_ws.json
+/bin/TestDiscovergyAPI/config_discovergy_dev_ws.json

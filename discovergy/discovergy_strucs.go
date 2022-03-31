@@ -47,6 +47,7 @@ type DiscovergyResult struct {
 	EnergyOut   int64  `json:"energyout"`
 	Energy      int64  `json:"energy"`
 	Power       int64  `json:"power"`
+	ClientName  string `json:"clientname"`
 }
 
 type DiscovergyOracleDB struct {

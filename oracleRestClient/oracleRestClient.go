@@ -52,6 +52,7 @@ func (r *OracleRestJsonRequest) GetOracleDBtoken(tr OracleTokenRequest) (string,
 	body := strings.NewReader(params.Encode())
 
 	req, err := http.NewRequest("POST", tr.Aouthurl, body)
+
 	if err != nil {
 		return "", err
 	}
@@ -65,7 +66,6 @@ func (r *OracleRestJsonRequest) GetOracleDBtoken(tr OracleTokenRequest) (string,
 	}
 	defer resp.Body.Close()
 
-	//fmt.Printf("++++++++++++++++++++ ERROR Do Test: %s\n", resp.Status)
 	if resp.StatusCode != 200 {
 		//statusCode := resp.StatusCode
 		r.Status = resp.Status
