@@ -5,13 +5,13 @@
 	xmlns:n0="http://www.oracle.com/xml/ns/dbchangelog-ext" 
 	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog 
 	http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.9.xsd">
-	<changeSet id="394f2414db29ec9dfdc180d0cc5c21cdae4935b0" author="(POWERMONITOR)-Generated" failOnError="false"    >
-		<n0:createSxmlObject objectName="INVERTER_REST_SEQ2" objectType="SEQUENCE" ownerName="POWERMONITOR"   >
+	<changeSet id="e64aa71ad8c10df7a0815d257f71226b4c461d79" author="(POWERMONITOR_DEV)-Generated" failOnError="false"    >
+		<n0:createSxmlObject objectName="INVERTER_REST_SEQ2" objectType="SEQUENCE" ownerName="POWERMONITOR_DEV"   >
 			<n0:source><![CDATA[
   <SEQUENCE xmlns="http://xmlns.oracle.com/ku" version="1.0">
-   <SCHEMA>POWERMONITOR</SCHEMA>
+   <SCHEMA>POWERMONITOR_DEV</SCHEMA>
    <NAME>INVERTER_REST_SEQ2</NAME>
-   <START_WITH>1222394</START_WITH>
+   <START_WITH>1222454</START_WITH>
    <INCREMENT>1</INCREMENT>
    <MINVALUE>1</MINVALUE>
    <MAXVALUE>9999999999999999999999999999</MAXVALUE>

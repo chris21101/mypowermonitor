@@ -5,16 +5,16 @@
 	xmlns:n0="http://www.oracle.com/xml/ns/dbchangelog-ext" 
 	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog 
 	http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.9.xsd">
-	<changeSet id="7637e21e594c7ec78e89017f8feaf888c4c36895" author="(POWERMONITOR)-Generated" failOnError="false"    >
-		<n0:createSxmlObject objectName="DISCOVERGY_REST_U1" objectType="INDEX" ownerName="POWERMONITOR"   >
+	<changeSet id="f295c6b40dad9d2bf8c616c2b0dc566c71341193" author="(POWERMONITOR_DEV)-Generated" failOnError="false"    >
+		<n0:createSxmlObject objectName="DISCOVERGY_REST_U1" objectType="INDEX" ownerName="POWERMONITOR_DEV"   >
 			<n0:source><![CDATA[
   <INDEX xmlns="http://xmlns.oracle.com/ku" version="1.0">
    <UNIQUE></UNIQUE>
-   <SCHEMA>POWERMONITOR</SCHEMA>
+   <SCHEMA>POWERMONITOR_DEV</SCHEMA>
    <NAME>DISCOVERGY_REST_U1</NAME>
    <TABLE_INDEX>
       <ON_TABLE>
-         <SCHEMA>POWERMONITOR</SCHEMA>
+         <SCHEMA>POWERMONITOR_DEV</SCHEMA>
          <NAME>DISCOVERGY_REST</NAME>
       </ON_TABLE>
       <COL_LIST>

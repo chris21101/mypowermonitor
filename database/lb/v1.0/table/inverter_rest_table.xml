@@ -5,11 +5,11 @@
 	xmlns:n0="http://www.oracle.com/xml/ns/dbchangelog-ext" 
 	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog 
 	http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.9.xsd">
-	<changeSet id="e6c824ec68b4e9acf9cc21fa7aec50c9a9987e60" author="(POWERMONITOR)-Generated" failOnError="false"    >
-		<n0:createSxmlObject objectName="INVERTER_REST" objectType="TABLE" ownerName="POWERMONITOR"   >
+	<changeSet id="f6b8624e7ce2629b67a75827e5ba8b8d17fe9a81" author="(POWERMONITOR_DEV)-Generated" failOnError="false"    >
+		<n0:createSxmlObject objectName="INVERTER_REST" objectType="TABLE" ownerName="POWERMONITOR_DEV"   >
 			<n0:source><![CDATA[
   <TABLE xmlns="http://xmlns.oracle.com/ku" version="1.0">
-   <SCHEMA>POWERMONITOR</SCHEMA>
+   <SCHEMA>POWERMONITOR_DEV</SCHEMA>
    <NAME>INVERTER_REST</NAME>
    <RELATIONAL_TABLE>
       <COL_LIST>

@@ -5,11 +5,11 @@
 	xmlns:n0="http://www.oracle.com/xml/ns/dbchangelog-ext" 
 	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog 
 	http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.9.xsd">
-	<changeSet id="2086ce53f1c54e5e5ef68a04cd777cec2201d8eb" author="(POWERMONITOR)-Generated" failOnError="false"    >
-		<n0:createSxmlObject objectName="DISCOVERGY_REST" objectType="TABLE" ownerName="POWERMONITOR"   >
+	<changeSet id="f65462afd780b1e12eae702759f7a5bc5fec838d" author="(POWERMONITOR_DEV)-Generated" failOnError="false"    >
+		<n0:createSxmlObject objectName="DISCOVERGY_REST" objectType="TABLE" ownerName="POWERMONITOR_DEV"   >
 			<n0:source><![CDATA[
   <TABLE xmlns="http://xmlns.oracle.com/ku" version="1.0">
-   <SCHEMA>POWERMONITOR</SCHEMA>
+   <SCHEMA>POWERMONITOR_DEV</SCHEMA>
    <NAME>DISCOVERGY_REST</NAME>
    <RELATIONAL_TABLE>
       <COL_LIST>

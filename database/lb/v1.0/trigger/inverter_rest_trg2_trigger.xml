@@ -5,10 +5,10 @@
 	xmlns:n0="http://www.oracle.com/xml/ns/dbchangelog-ext" 
 	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog 
 	http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.9.xsd">
-	<changeSet id="d0c511d713338005121534012a36f520c663eff8" author="(POWERMONITOR)-Generated" failOnError="false"    >
-		<n0:createOracleTrigger objectName="INVERTER_REST_TRG2" objectType="TRIGGER" ownerName="POWERMONITOR"   >
+	<changeSet id="0e1674bcfd0c7ef3593ea88fe1048c5463dbfdd5" author="(POWERMONITOR_DEV)-Generated" failOnError="false"    >
+		<n0:createOracleTrigger objectName="INVERTER_REST_TRG2" objectType="TRIGGER" ownerName="POWERMONITOR_DEV"   >
 			<n0:source><![CDATA[
-  CREATE OR REPLACE EDITIONABLE TRIGGER "POWERMONITOR"."INVERTER_REST_TRG2" 
+  CREATE OR REPLACE EDITIONABLE TRIGGER "POWERMONITOR_DEV"."INVERTER_REST_TRG2" 
 before insert on inverter_rest 
 for each row 
 begin
@@ -19,8 +19,9 @@ begin
     END IF;
   END COLUMN_SEQUENCES;
 end;
+
 /
-ALTER TRIGGER "POWERMONITOR"."INVERTER_REST_TRG2" ENABLE]]></n0:source>
+ALTER TRIGGER "POWERMONITOR_DEV"."INVERTER_REST_TRG2" ENABLE]]></n0:source>
 		</n0:createOracleTrigger>
 	</changeSet>
 </databaseChangeLog>

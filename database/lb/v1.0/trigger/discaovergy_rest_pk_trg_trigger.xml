@@ -5,11 +5,11 @@
 	xmlns:n0="http://www.oracle.com/xml/ns/dbchangelog-ext" 
 	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog 
 	http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.9.xsd">
-	<changeSet id="78d1015918ce95a1983633d0057897504f85b5c6" author="(POWERMONITOR)-Generated" failOnError="false"    >
-		<n0:createOracleTrigger objectName="DISCAOVERGY_REST_PK_TRG" objectType="TRIGGER" ownerName="POWERMONITOR"   >
+	<changeSet id="1b1f51e213f7e6cfe85f11e980633d3a97f3ab0c" author="(POWERMONITOR_DEV)-Generated" failOnError="false"    >
+		<n0:createOracleTrigger objectName="DISCAOVERGY_REST_PK_TRG" objectType="TRIGGER" ownerName="POWERMONITOR_DEV"   >
 			<n0:source><![CDATA[
-  CREATE OR REPLACE EDITIONABLE TRIGGER "POWERMONITOR"."DISCAOVERGY_REST_PK_TRG" 
-   before insert on "POWERMONITOR"."DISCOVERGY_REST" 
+  CREATE OR REPLACE EDITIONABLE TRIGGER "POWERMONITOR_DEV"."DISCAOVERGY_REST_PK_TRG" 
+   before insert on "DISCOVERGY_REST" 
    for each row 
 begin  
    if inserting then 
@@ -20,7 +20,7 @@ begin
 end;
 
 /
-ALTER TRIGGER "POWERMONITOR"."DISCAOVERGY_REST_PK_TRG" ENABLE]]></n0:source>
+ALTER TRIGGER "POWERMONITOR_DEV"."DISCAOVERGY_REST_PK_TRG" ENABLE]]></n0:source>
 		</n0:createOracleTrigger>
 	</changeSet>
 </databaseChangeLog>
