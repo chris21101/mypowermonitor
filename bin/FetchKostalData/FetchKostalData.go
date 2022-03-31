@@ -13,10 +13,10 @@ import (
 func main() {
 
 	oracleRequest := oracleRestClient.OracleRestJsonRequest{
-		Aouthurl:     "https://h4de06bp7uxfolh-db202110152122.adb.eu-frankfurt-1.oraclecloudapps.com/ords/pm/oauth/token",
-		ClientID:     "eNC0tHpiENRcRIy6m1Py3w..",
-		ClientSecret: "rswBxuI877CbWEVyWua9Wg..",
-		AccessUrl:    "https://h4de06bp7uxfolh-db202110152122.adb.eu-frankfurt-1.oraclecloudapps.com/ords/pm/rest-v1/inverter/",
+		Aouthurl:     "https://h4de06bp7uxfolh-db202110152122.adb.eu-frankfurt-1.oraclecloudapps.com/ords/pm_dev/oauth/token",
+		ClientID:     "Mp5fiHzw0fXVZtKyzb6Vdg..",
+		ClientSecret: "koR-XmQzf74S2OpPRq8h0w..",
+		AccessUrl:    "https://h4de06bp7uxfolh-db202110152122.adb.eu-frankfurt-1.oraclecloudapps.com/ords/pm_dev/rest-v1/inverter/",
 		Oauthtoken:   "",
 	}
 
