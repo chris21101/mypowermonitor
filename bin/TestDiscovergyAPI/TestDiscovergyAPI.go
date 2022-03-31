@@ -97,7 +97,8 @@ func main() {
 		} else if httpStatusCode == 401 {
 			err := disapi.NewToken()
 			if err != nil {
-				fmt.Printf("Failed NewToken: %s \n", err)
+				fmt.Printf("%s - %s\n", power_util.GetTimeStr(), " ERROR: NewToken()")
+				fmt.Printf("%s - %s\n", power_util.GetTimeStr(), err)
 				time.Sleep(time.Duration(300) * time.Second)
 			}
 			continue
@@ -143,8 +144,11 @@ func main() {
 				} else if oracleRequest.StatusCode == 401 {
 					fmt.Printf("%s - %s\n", power_util.GetTimeStr(), "Request a new token")
 					fmt.Printf("%s - %s\n", power_util.GetTimeStr(), oracleRequest.Oauthtoken)
+					continue
 				} else if oracleRequest.StatusCode == 503 {
 					fmt.Printf("%s - No Oracle Service: %s \n", power_util.GetTimeStr(), oracleRequest.Status)
+					time.Sleep(time.Duration(120) * time.Second)
+					continue
 				} else {
 					fmt.Printf("%s - %d : SaveJsonOracleDB() Status: %s - StatusCode: %d \n", power_util.GetTimeStr(), j, oracleRequest.Status, oracleRequest.StatusCode)
 				}
