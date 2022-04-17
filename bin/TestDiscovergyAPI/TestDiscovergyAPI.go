@@ -154,7 +154,7 @@ func main() {
 				}
 			}
 			//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-			time.Sleep(time.Duration(10) * time.Second)
+			time.Sleep(time.Duration(30) * time.Second)
 		}
 
 	}
