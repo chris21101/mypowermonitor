@@ -1,3 +1,5 @@
 bin/FetchElectricityMeter/FetchElectricityMeter.exe
 /bin/TestDiscovergyAPI/config_discovergy_ws.json
 /bin/TestDiscovergyAPI/config_discovergy_dev_ws.json
+doku/fahrplan.txt
+bin/FetchKostalData/config_kostal_dev_ws.json
