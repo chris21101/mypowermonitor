@@ -38,8 +38,8 @@ FROM   user_ords_client_privileges;
 --revoke 
 BEGIN
   OAUTH.revoke_client_role(
-    p_client_name => 'powermonitor_dev_client',
-    p_role_name   => 'powermonitor_dev_role'
+    p_client_name => 'powermonitor_client',
+    p_role_name   => 'powermonitor_role'
   );
 
   COMMIT;
@@ -48,9 +48,12 @@ END;
 
 BEGIN
   OAUTH.delete_client(
-    p_name => 'powermonitor_dev_client'
+    p_name => 'powermonitor_client'
   );
 
   COMMIT;
 END;
 /
+curl -i -k --user qy-Hl2w-dZB7bcrAltc5cQ..:a0LeMyE72CVc3VhZt3aRCg.. --data "grant_type=client_credentials"  https://h4de06bp7uxfolh-db202110152122.adb.eu-frankfurt-1.oraclecloudapps.com/ords/pm/oauth/token
+
+

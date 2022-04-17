@@ -230,7 +230,42 @@ END;'
 END;
 /
 
-/*
+DECLARE
+  l_roles     OWA.VC_ARR;
+  l_modules   OWA.VC_ARR;
+  l_patterns  OWA.VC_ARR;
+  l_prefix varchar2(5);
+  l_username varchar2(32);
+
+begin
+
+  select user, regexp_substr(user,'_.{3}$') into l_username,l_prefix from dual;
+  
+  ORDS.CREATE_ROLE(p_role_name  => lower(l_username) ||'_role');
+
+  l_roles(1)   := lower(l_username) ||'_role';
+  l_modules(1) := 'rest-v1';
+  l_patterns(1):= '/discovergy/';
+  l_patterns(2):= '/discovergy/*';
+  l_patterns(3):= '/inverter/';
+  l_patterns(4):= '/inverter/*';
+
+  ORDS.DEFINE_PRIVILEGE(
+      p_privilege_name => lower(l_username) || '_priv',
+      p_roles          => l_roles,
+      p_patterns       => l_patterns,
+      p_modules        => l_modules,
+      p_label          => 'Discovergy Data',
+      p_description    => 'Allow access to the Discovergy data.',
+      p_comments       => NULL);      
+
+
+  COMMIT;
+end;
+/
+
+set serveroutput on
+
 DECLARE
   l_roles     OWA.VC_ARR;
   l_modules   OWA.VC_ARR;
@@ -257,4 +292,4 @@ BEGIN
   );
 END;
 /
-*/
+
