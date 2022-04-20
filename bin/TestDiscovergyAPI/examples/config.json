@@ -1,6 +1,7 @@
 {
     "ClientName": "discovergy_ws",
     "Filename": "config_discovergy_ws.json",
+    "SleepTime": 30,
     "BaseUrl": "https://api.discovergy.com",
     "MeterId": "345598f062f64a5196b556d5d2a50746",
     "ReadingFealds": "energy,energyOut,power",

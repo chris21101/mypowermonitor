@@ -144,7 +144,8 @@ func main() {
 				}
 			}
 			//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-			time.Sleep(time.Duration(30) * time.Second)
+			fmt.Printf("%s - %d : Sleep %d Seconds\n", power_util.GetTimeStr(), j, disapi.Config.SleepTime)
+			time.Sleep(time.Duration(disapi.Config.SleepTime) * time.Second)
 		}
 
 	}

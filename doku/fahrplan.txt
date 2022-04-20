@@ -1,7 +1,11 @@
-20220417
-  - Kostal Config umstellen
-  -- Sleeptime Config
+dev-20220402
+  - Kostal: Config umstellen
+  - Kostal: Sleeptime Config
 
-20220420
+dev-20220420
   - discovergy Sleeptime Config
+
+Ideen
+  - TestDiscovergyAPI -> FetchElectricityMeter
   - all: Logging neu
+  - power_util Object als Basis

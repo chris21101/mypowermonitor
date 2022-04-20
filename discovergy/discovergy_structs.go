@@ -3,6 +3,7 @@ package discovergy
 type DiscovergyConfig struct {
 	ClientName            string `json:"ClientName"`
 	Filename              string `json:"Filename"`
+	SleepTime             int64  `json:"SleepTime"`
 	BaseUrl               string `json:"BaseUrl"`
 	MeterId               string `json:"MeterId"`
 	ReadingFealds         string `json:"ReadingFealds"`
