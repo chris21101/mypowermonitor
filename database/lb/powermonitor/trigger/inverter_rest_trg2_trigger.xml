@@ -5,19 +5,18 @@
 	xmlns:n0="http://www.oracle.com/xml/ns/dbchangelog-ext" 
 	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog 
 	http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.9.xsd">
-	<changeSet id="60484e5528ac932b6740c672448754c3f73c6713" author="(POWERMONITOR_DEV)-Generated" failOnError="false"    >
+	<changeSet id="7b27c298d42b9f33491a4e535b966ede8d00faaa" author="(POWERMONITOR_DEV)-Generated" failOnError="false"    >
 		<n0:createOracleTrigger objectName="INVERTER_REST_TRG2" objectType="TRIGGER" ownerName="POWERMONITOR_DEV"   >
 			<n0:source><![CDATA[
   CREATE OR REPLACE EDITIONABLE TRIGGER "POWERMONITOR_DEV"."INVERTER_REST_TRG2" 
 before insert on inverter_rest 
 for each row 
-begin
-  <<COLUMN_SEQUENCES>>
-  BEGIN
-    IF INSERTING AND :NEW.ID IS NULL THEN
-      SELECT INVERTER_REST_SEQ2.NEXTVAL INTO :NEW.ID FROM SYS.DUAL;
-    END IF;
-  END COLUMN_SEQUENCES;
+begin  
+   if inserting then 
+      if :NEW."ID" is null then 
+         select INVERTER_REST_SEQ2.nextval into :NEW."ID" from dual; 
+      end if; 
+   end if; 
 end;
 
 /

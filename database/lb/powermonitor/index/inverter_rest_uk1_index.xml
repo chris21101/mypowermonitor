@@ -5,7 +5,7 @@
 	xmlns:n0="http://www.oracle.com/xml/ns/dbchangelog-ext" 
 	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog 
 	http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.9.xsd">
-	<changeSet id="bf78eb4fcf9c188e1eb67238ee5fbda354b82a03" author="(POWERMONITOR_DEV)-Generated" failOnError="false"    >
+	<changeSet id="cb04a309442b73b41963b978de17c6e63e1f55e3" author="(POWERMONITOR_DEV)-Generated" failOnError="false"    >
 		<n0:createSxmlObject objectName="INVERTER_REST_UK1" objectType="INDEX" ownerName="POWERMONITOR_DEV"   >
 			<n0:source><![CDATA[
   <INDEX xmlns="http://xmlns.oracle.com/ku" version="1.0">
@@ -22,7 +22,7 @@
             <NAME>MEASURE_TIME</NAME>
          </COL_LIST_ITEM>
          <COL_LIST_ITEM>
-            <NAME>INVERTER_TYPE</NAME>
+            <NAME>CLIENTNAME</NAME>
          </COL_LIST_ITEM>
       </COL_LIST>
       <INDEX_ATTRIBUTES>
