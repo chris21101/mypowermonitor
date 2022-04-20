@@ -8,6 +8,7 @@ type KostalConfig struct {
 	KostalUsername string `json:"KostalUsername"`
 	KostalPasswd   string `json:"KostalPasswd"`
 	KostalServer   string `json:"KostalServer"`
+	SleepTime      int64  `json:"SleepTime"`
 	OracleDB       KostalOracleDB
 }
 type KostalOracleDB struct {
