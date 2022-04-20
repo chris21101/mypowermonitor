@@ -1,0 +1,15 @@
+{
+    "ClientName": "kostal_dev_ws",
+    "Filename": "config_kostal_dev_ws.json",
+    "KostalUsername": "pvserver",
+    "KostalPasswd": "pvwr",
+    "KostalServer":  "http://192.168.178.27",
+    "SleepTime" : 10,
+	"OracleDB": {
+        "Aouthurl": "https://h4de06bp7uxfolh-db202110152122.adb.eu-frankfurt-1.oraclecloudapps.com/ords/pm/oauth/token",
+        "ClientID": "qy-Hl2w-dZB7bcrAltc5cQ..",
+        "ClientSecret": "a0LeMyE72CVc3VhZt3aRCg..",
+        "AccessUrl": "https://h4de06bp7uxfolh-db202110152122.adb.eu-frankfurt-1.oraclecloudapps.com/ords/pm/rest-v1/inverter/"
+    }
+
+}
