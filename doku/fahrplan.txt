@@ -1,0 +1,7 @@
+20220417
+  - Kostal Config umstellen
+  -- Sleeptime Config
+
+20220420
+  - discovergy Sleeptime Config
+  - all: Logging neu
