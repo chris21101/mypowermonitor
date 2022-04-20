@@ -11,19 +11,31 @@ import (
 )
 
 func main() {
+	fmt.Println("Start FetchKostalData")
+	var kostalapi kostalinverter.KostalAPI
+	var oracleRequest oracleRestClient.OracleRestJsonRequest
+	/*
+		oracleRequest := oracleRestClient.OracleRestJsonRequest{
+			Aouthurl:     "https://h4de06bp7uxfolh-db202110152122.adb.eu-frankfurt-1.oraclecloudapps.com/ords/pm/oauth/token",
+			ClientID:     "qy-Hl2w-dZB7bcrAltc5cQ..",
+			ClientSecret: "a0LeMyE72CVc3VhZt3aRCg..",
+			AccessUrl:    "https://h4de06bp7uxfolh-db202110152122.adb.eu-frankfurt-1.oraclecloudapps.com/ords/pm/rest-v1/inverter/",
+			Oauthtoken:   "",
+		}
+	*/
+	_ = kostalapi.CheckOsEnv()
 
-	oracleRequest := oracleRestClient.OracleRestJsonRequest{
-		Aouthurl:     "https://h4de06bp7uxfolh-db202110152122.adb.eu-frankfurt-1.oraclecloudapps.com/ords/pm/oauth/token",
-		ClientID:     "qy-Hl2w-dZB7bcrAltc5cQ..",
-		ClientSecret: "a0LeMyE72CVc3VhZt3aRCg..",
-		AccessUrl:    "https://h4de06bp7uxfolh-db202110152122.adb.eu-frankfurt-1.oraclecloudapps.com/ords/pm/rest-v1/inverter/",
-		Oauthtoken:   "",
-	}
+	_ = kostalapi.ReadConfigFromFile()
+
+	oracleRequest.AccessUrl = kostalapi.Config.OracleDB.AccessUrl
+	oracleRequest.Aouthurl = kostalapi.Config.OracleDB.Aouthurl
+	oracleRequest.ClientID = kostalapi.Config.OracleDB.ClientID
+	oracleRequest.ClientSecret = kostalapi.Config.OracleDB.ClientSecret
 
 	var j = 0
 
 	for {
-		mDate, err := kostalinverter.FetchKostalValue()
+		mDate, err := kostalapi.FetchKostalValue()
 
 		if err != nil {
 			fmt.Printf("%s - %s\n", power_util.GetTimeStr(), err)
