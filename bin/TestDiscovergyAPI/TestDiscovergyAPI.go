@@ -47,16 +47,6 @@ func main() {
 	*/
 	_ = disapi.ReadConfigFromFile()
 
-	/*
-		oracleRequest := oracleRestClient.OracleRestJsonRequest{
-			Aouthurl:     "https://h4de06bp7uxfolh-db202110152122.adb.eu-frankfurt-1.oraclecloudapps.com/ords/pm/oauth/token",
-			ClientID:     "eNC0tHpiENRcRIy6m1Py3w..",
-			ClientSecret: "rswBxuI877CbWEVyWua9Wg..",
-			AccessUrl:    "https://h4de06bp7uxfolh-db202110152122.adb.eu-frankfurt-1.oraclecloudapps.com/ords/pm/rest-v1/discovergy/",
-			Oauthtoken:   "",
-		}
-	*/
-
 	oracleRequest.AccessUrl = disapi.Config.OracleDB.AccessUrl
 	oracleRequest.Aouthurl = disapi.Config.OracleDB.Aouthurl
 	oracleRequest.ClientID = disapi.Config.OracleDB.ClientID
