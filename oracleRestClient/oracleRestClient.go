@@ -116,6 +116,7 @@ func (r *OracleRestJsonRequest) SaveJsonOracleDB(jstring string) error {
 	req.Header.Set("Content-Type", "application/json")
 	resp, err := client.Do(req)
 	if err != nil {
+		defer resp.Body.Close()
 		return fmt.Errorf("SaveJsonOracleDB - client.Do(req): %v http_status: %s", err, resp.Status)
 	}
 
