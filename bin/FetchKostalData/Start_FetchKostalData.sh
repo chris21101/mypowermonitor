@@ -3,3 +3,5 @@
 export ClientName=kostal_ws
 
 ./FetchKostalData
+
+exit
