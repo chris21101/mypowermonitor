@@ -29,7 +29,6 @@ package discovergy
 
 import (
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -37,7 +36,14 @@ import (
 	"os"
 
 	"example.com/mypowermonitor/myoauth"
+	"example.com/mypowermonitor/power_util"
 )
+
+var loggerConfig *power_util.LoggerConfig
+
+func (api *DiscovergyAPI) Set_LoggerConfig(p_logger *power_util.LoggerConfig) {
+	loggerConfig = p_logger
+}
 
 func (api *DiscovergyAPI) CheckOsEnv() error {
 	//Read enviroment variable "ClientName"
@@ -70,7 +76,8 @@ func GetAuthorizeURL(authUrl string) (string, error) {
 func (api *DiscovergyAPI) ReadConfigFromFile() error {
 	filename := "config_" + api.Config.ClientName + ".json"
 	api.Config.Filename = filename
-	fmt.Println("Read " + filename)
+	loggerConfig.ZapLogger.Infof("Read %s", filename)
+	//fmt.Println("Read " + filename)
 	bites, err := ioutil.ReadFile(filename)
 	json.Unmarshal(bites, &api.Config)
 	if err != nil {
@@ -82,19 +89,18 @@ func (api *DiscovergyAPI) ReadConfigFromFile() error {
 
 func (api *DiscovergyAPI) SaveToFile() error {
 	filename := "config_" + api.Config.ClientName + ".json"
-
-	fmt.Println("Save File " + filename)
+	loggerConfig.ZapLogger.Debugf("Save File %s", filename)
 
 	api.Config.Filename = filename
 	prettyJSON, err := json.MarshalIndent(api.Config, "", "    ")
 	if err != nil {
-		log.Fatal("Failed to generate json", err)
+		loggerConfig.ZapLogger.Fatal("Failed to generate json", err)
 	}
 
 	toWrite := []byte(prettyJSON)
 	err = ioutil.WriteFile(filename, toWrite, 0644)
 	if err != nil {
-		log.Fatal("Failed to generate json", err)
+		loggerConfig.ZapLogger.Fatal("Failed to generate json", err)
 	}
 	return nil
 }

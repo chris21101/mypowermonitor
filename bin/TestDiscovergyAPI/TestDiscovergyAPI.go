@@ -13,11 +13,16 @@ import (
 )
 
 func main() {
-	fmt.Println("Start TestDiscovergyAPI")
+
 	var disapi discovergy.DiscovergyAPI
 	var oracleRequest oracleRestClient.OracleRestJsonRequest
 	//Needs Env "ClientName, DiscovergyEmail and DiscovergyPasswd"
 	_ = disapi.CheckOsEnv()
+	logger := power_util.NewLoggerConfig(os.Getenv("LogLevel"), "CONSOLE", "")
+	disapi.Set_LoggerConfig(logger)
+	oracleRequest.Set_LoggerConfig(logger)
+	sugarLogger := logger.ZapLogger
+	sugarLogger.Infof("Start TestDiscovergyAPI <%s> ", os.Getenv("LogLevel"))
 
 	/*
 		Requires the following variables
@@ -53,21 +58,18 @@ func main() {
 	oracleRequest.ClientSecret = disapi.Config.OracleDB.ClientSecret
 
 	// Programm needs a ConsumerKey and ConsumerSecret
-	if len(disapi.Config.ConsumerKey) == 0 || len(disapi.Config.ConsumerSecret) == 0 {
-		err := disapi.ClientRegistration()
 
-		if err != nil {
-			fmt.Printf("Failed ClientRegistration: %s \n", err)
-			os.Exit(3)
-		}
-	} else {
-		fmt.Println("Client is registered")
+	err := disapi.ClientRegistration()
+
+	if err != nil {
+		sugarLogger.Errorf("Failed ClientRegistration: %s \n", err)
+		os.Exit(3)
 	}
 
 	// Every 24h we need a new token ???
-	err := disapi.NewToken()
+	err = disapi.NewToken()
 	if err != nil {
-		fmt.Printf("Failed NewToken: %s \n", err)
+		sugarLogger.Errorf("Failed NewToken: %s \n", err)
 		os.Exit(3)
 	}
 
@@ -77,22 +79,29 @@ func main() {
 		var measures discovergy.DiscovergyReads
 		var disresults discovergy.DiscovergyResult
 		disresults.ClientName = disapi.Config.ClientName
-		fmt.Printf("%s - %s\n", power_util.GetTimeStr(), "Start new reading: "+disapi.Config.ClientName)
+		sugarLogger.Infof("%s", "Start new reading: "+disapi.Config.ClientName)
 
 		result, httpStatusCode, err := disapi.GetLastRead()
 		strHttpStatusCode := strconv.Itoa(httpStatusCode)
-		fmt.Printf("%s - %s\n", power_util.GetTimeStr(), "HTTP StatusCode = "+strHttpStatusCode)
+		sugarLogger.Debugf("%s - %s", power_util.GetTimeStr(), "HTTP StatusCode = "+strHttpStatusCode)
 		if err != nil {
-			fmt.Printf("%s - %s\n", power_util.GetTimeStr(), err)
+			sugarLogger.Errorf("%s - %s", power_util.GetTimeStr(), err)
 			time.Sleep(time.Duration(60) * time.Second)
 		} else if httpStatusCode == 401 {
 			err := disapi.NewToken()
 			if err != nil {
-				fmt.Printf("%s - %s\n", power_util.GetTimeStr(), " ERROR: NewToken()")
-				fmt.Printf("%s - %s\n", power_util.GetTimeStr(), err)
+				sugarLogger.Errorf("%s - %s", power_util.GetTimeStr(), " ERROR: NewToken()")
+				sugarLogger.Errorf("%s - %s", power_util.GetTimeStr(), err)
 				time.Sleep(time.Duration(300) * time.Second)
 			}
 			continue
+		} else if httpStatusCode == 400 {
+			err := disapi.ClientRegistration()
+
+			if err != nil {
+				sugarLogger.Errorf("Failed ClientRegistration: %s ", err)
+				os.Exit(3)
+			}
 		} else {
 			//Expected output:
 			//{"time":1636152869126,"values":{"energyOut":119411587467000,"energy":138376348839000,"power":344460}}
@@ -102,7 +111,7 @@ func main() {
 			err := json.Unmarshal(Data, &measures)
 
 			if err != nil {
-				fmt.Println(err)
+				sugarLogger.Errorf("ERROR: %v", err)
 			}
 			tUnix := measures.MeasureTime / int64(time.Microsecond)
 			t := time.Unix(tUnix, 0)
@@ -111,7 +120,7 @@ func main() {
 				t.Year(), t.Month(), t.Day(),
 				t.Hour(), t.Minute(), t.Second())
 
-			fmt.Printf("%s - Datum: %s\n", power_util.GetTimeStr(), formTimestamp)
+			sugarLogger.Debugf("%s - Datum: %s", power_util.GetTimeStr(), formTimestamp)
 			disresults.MeasureTime = formTimestamp
 			disresults.Energy = measures.Values.Energy
 			disresults.EnergyOut = measures.Values.EnergyOut
@@ -119,32 +128,32 @@ func main() {
 
 			jbytes, _ := json.Marshal(disresults)
 			jstring := string(jbytes)
-			fmt.Printf("%s - %s\n", power_util.GetTimeStr(), jstring)
-
+			//fmt.Printf("%s - %s\n", power_util.GetTimeStr(), jstring)
+			sugarLogger.Debugf("%s", jstring)
 			//++++++++++++++++++++++++++++++++++++++ New Save to Oracle ++++++++++++++++++++
 			err = oracleRequest.SaveJsonOracleDB(jstring)
 			//fmt.Printf("%v\n", oracleRequest)
 			j++
 			if err != nil {
-				fmt.Printf("%s - Error: SaveJsonOracleDB() - %s\n", power_util.GetTimeStr(), err)
+				sugarLogger.Errorf("%s - Error: SaveJsonOracleDB() - %s", power_util.GetTimeStr(), err)
 			} else {
 
 				if oracleRequest.StatusCode == 400 {
-					fmt.Printf("%s - %d :!! %s\n", power_util.GetTimeStr(), j, oracleRequest.Error_message)
+					sugarLogger.Errorf("%d :!! %s", j, oracleRequest.Error_message)
 				} else if oracleRequest.StatusCode == 401 {
-					fmt.Printf("%s - %s\n", power_util.GetTimeStr(), "Request a new token")
-					fmt.Printf("%s - %s\n", power_util.GetTimeStr(), oracleRequest.Oauthtoken)
+					sugarLogger.Errorf("%s", "Request a new token")
+					sugarLogger.Errorf("%s", oracleRequest.Oauthtoken)
 					continue
 				} else if oracleRequest.StatusCode == 503 {
-					fmt.Printf("%s - No Oracle Service: %s \n", power_util.GetTimeStr(), oracleRequest.Status)
+					sugarLogger.Errorf("No Oracle Service: %s", oracleRequest.Status)
 					time.Sleep(time.Duration(120) * time.Second)
 					continue
 				} else {
-					fmt.Printf("%s - %d : SaveJsonOracleDB() Status: %s - StatusCode: %d \n", power_util.GetTimeStr(), j, oracleRequest.Status, oracleRequest.StatusCode)
+					sugarLogger.Infof("%d : SaveJsonOracleDB() Status: %s - StatusCode: %d", j, oracleRequest.Status, oracleRequest.StatusCode)
 				}
 			}
 			//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-			fmt.Printf("%s - %d : Sleep %d Seconds\n", power_util.GetTimeStr(), j, disapi.Config.SleepTime)
+			sugarLogger.Debugf("%d : Sleep %d Seconds", j, disapi.Config.SleepTime)
 			time.Sleep(time.Duration(disapi.Config.SleepTime) * time.Second)
 		}
 
