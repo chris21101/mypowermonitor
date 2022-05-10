@@ -5,7 +5,6 @@ import (
 	"errors"
 	"fmt"
 	"io/ioutil"
-	"log"
 	"net/http"
 	"os"
 	"regexp"
@@ -13,17 +12,25 @@ import (
 	"strings"
 	"time"
 
+	"example.com/mypowermonitor/power_util"
 	"github.com/PuerkitoBio/goquery"
 )
+
+var loggerConfig *power_util.LoggerConfig
+
+func (api *KostalAPI) Set_LoggerConfig(p_logger *power_util.LoggerConfig) {
+	loggerConfig = p_logger
+}
 
 func (api *KostalAPI) ReadConfigFromFile() error {
 	filename := "config_" + api.Config.ClientName + ".json"
 	api.Config.Filename = filename
-	fmt.Println("Read " + filename)
+	loggerConfig.ZapLogger.Debugf("Read File: %s", filename)
+	//fmt.Println("Read " + filename)
 	bites, err := ioutil.ReadFile(filename)
 	json.Unmarshal(bites, &api.Config)
 	if err != nil {
-		log.Fatal(err)
+		loggerConfig.ZapLogger.Fatal(err)
 	}
 
 	return nil
@@ -32,18 +39,18 @@ func (api *KostalAPI) ReadConfigFromFile() error {
 func (api *KostalAPI) SaveToFile() error {
 	filename := "config_" + api.Config.ClientName + ".json"
 
-	fmt.Println("Save File " + filename)
+	loggerConfig.ZapLogger.Info("Save File " + filename)
 
 	api.Config.Filename = filename
 	prettyJSON, err := json.MarshalIndent(api.Config, "", "    ")
 	if err != nil {
-		log.Fatal("Failed to generate json", err)
+		loggerConfig.ZapLogger.Fatal("Failed to generate json", err)
 	}
 
 	toWrite := []byte(prettyJSON)
 	err = ioutil.WriteFile(filename, toWrite, 0644)
 	if err != nil {
-		log.Fatal("Failed to generate json", err)
+		loggerConfig.ZapLogger.Fatal("Failed to generate json", err)
 	}
 	return nil
 }
@@ -70,7 +77,7 @@ func (api *KostalAPI) FetchKostalValue() (MeasureDate, error) {
 	req.Close = true
 
 	if err != nil {
-		println(err)
+		loggerConfig.ZapLogger.Errorf("%s", err)
 		return measure, err
 	}
 
@@ -84,7 +91,7 @@ func (api *KostalAPI) FetchKostalValue() (MeasureDate, error) {
 	res, err := client.Do(req)
 
 	if err != nil {
-		fmt.Printf("%s : %s\n", formTimestamp, err)
+		loggerConfig.ZapLogger.Errorf("%s : %s\n", formTimestamp, err)
 		return measure, err
 	}
 	defer res.Body.Close()
@@ -92,7 +99,7 @@ func (api *KostalAPI) FetchKostalValue() (MeasureDate, error) {
 	doc, err := goquery.NewDocumentFromReader(res.Body)
 
 	if err != nil {
-		println(err)
+		loggerConfig.ZapLogger.Errorf("%s", err)
 		return measure, err
 	}
 	var allValues []string
@@ -132,7 +139,7 @@ func (api *KostalAPI) FetchKostalValue() (MeasureDate, error) {
 					measure.Tagesenergie = 0
 				}
 			default:
-				println("Wrong columnname found. Not in (aktuell|Tagesenergie|Gesamtenergie) ")
+				loggerConfig.ZapLogger.Error("Wrong columnname found. Not in (aktuell|Tagesenergie|Gesamtenergie) ")
 				return measure, errors.New("wrong columnname found with regexp")
 			}
 		}

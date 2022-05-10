@@ -2,7 +2,7 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
+	"os"
 	"time"
 
 	"example.com/mypowermonitor/kostalinverter"
@@ -11,7 +11,6 @@ import (
 )
 
 func main() {
-	fmt.Println("Start FetchKostalData")
 	var kostalapi kostalinverter.KostalAPI
 	var oracleRequest oracleRestClient.OracleRestJsonRequest
 	/*
@@ -24,6 +23,12 @@ func main() {
 		}
 	*/
 	_ = kostalapi.CheckOsEnv()
+	logger := power_util.NewLoggerConfig(os.Getenv("LogLevel"), "CONSOLE", "")
+	kostalapi.Set_LoggerConfig(logger)
+	oracleRequest.Set_LoggerConfig(logger)
+	sugarLogger := logger.ZapLogger
+	defer sugarLogger.Sync()
+	sugarLogger.Infof("Start FetchKostalData <%s> ", os.Getenv("LogLevel"))
 
 	_ = kostalapi.ReadConfigFromFile()
 
@@ -38,35 +43,35 @@ func main() {
 		mDate, err := kostalapi.FetchKostalValue()
 
 		if err != nil {
-			fmt.Printf("%s - %s\n", power_util.GetTimeStr(), err)
+			sugarLogger.Errorf("%s", err)
 		} else {
 			j++
 			jbytes, err := json.Marshal(mDate)
 			jstring := string(jbytes)
 			if err != nil {
-				fmt.Printf("%s - %s\n", power_util.GetTimeStr(), err)
+				sugarLogger.Errorf("%s", err)
 			} else {
 
-				fmt.Printf("%s - %d run: %s\n", power_util.GetTimeStr(), j, jstring)
+				sugarLogger.Debugf("%d run: %s", j, jstring)
 
 				err = oracleRequest.SaveJsonOracleDB(jstring)
 
 				if err != nil {
-					fmt.Printf("%s - oracleRequest.SaveJsonOracleDB: - %s\n", power_util.GetTimeStr(), err)
-					fmt.Printf("%s - %d : %s\n", power_util.GetTimeStr(), j, oracleRequest.Error_message)
+					sugarLogger.Errorf("oracleRequest.SaveJsonOracleDB: - %s", err)
+					sugarLogger.Errorf("%d : %s", j, oracleRequest.Error_message)
 					time.Sleep(time.Duration(120) * time.Second)
 				} else {
 
 					if oracleRequest.StatusCode == 400 {
-						fmt.Printf("%s - %d : %s\n", power_util.GetTimeStr(), j, oracleRequest.Error_message)
+						sugarLogger.Debugf("%d : %s", j, oracleRequest.Error_message)
 					} else if oracleRequest.StatusCode == 401 {
-						fmt.Printf("%s - %s\n", power_util.GetTimeStr(), "Request a new token")
-						fmt.Printf("%s - %s\n", power_util.GetTimeStr(), oracleRequest.Oauthtoken)
+						sugarLogger.Debugf("%s\n", "Request a new token")
+						sugarLogger.Debugf("%s\n", oracleRequest.Oauthtoken)
 					} else if oracleRequest.StatusCode == 503 {
-						fmt.Printf("<<<<%s - %d : %s\n", power_util.GetTimeStr(), j, oracleRequest.Status)
+						sugarLogger.Debugf("%d : %s\n", j, oracleRequest.Status)
 						time.Sleep(time.Duration(120) * time.Second)
 					} else {
-						fmt.Printf("%s - %d : SaveJsonOracleDB() Status: %s - StatusCode: %d \n", power_util.GetTimeStr(), j, oracleRequest.Status, oracleRequest.StatusCode)
+						sugarLogger.Infof("%d : SaveJsonOracleDB() Status: %s - StatusCode: %d", j, oracleRequest.Status, oracleRequest.StatusCode)
 					}
 				}
 			}

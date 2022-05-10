@@ -18,7 +18,7 @@ import (
 var Endpoint = oauth1.Endpoint{}
 
 func (api *DiscovergyAPI) ClientRegistration() error {
-	fmt.Println("Start ClientRegistration()")
+	loggerConfig.ZapLogger.Info("Start ClientRegistration()")
 	//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	//+ https://api.discovergy.com/docs/#/OAuth1/getConsumerCredentials
 	//+	Discovergy /oauth1/consumer_token Authorization Step 1
@@ -30,8 +30,8 @@ func (api *DiscovergyAPI) ClientRegistration() error {
 	data := url.Values{}
 	data.Set("client", api.Config.ClientName)
 	encodedData := data.Encode()
-	fmt.Println(encodedData)
-
+	//fmt.Println(encodedData)
+	loggerConfig.ZapLogger.Debug(encodedData)
 	urlPath := api.Config.BaseUrl + api.Config.ClientRegistrationUrl
 
 	req, err := http.NewRequest("POST", urlPath, strings.NewReader(encodedData))
@@ -46,8 +46,8 @@ func (api *DiscovergyAPI) ClientRegistration() error {
 		return fmt.Errorf("got error %s", err.Error())
 	}
 	defer response.Body.Close()
-	fmt.Println(response.Status)
 
+	loggerConfig.ZapLogger.Debug(response.Status)
 	body, err := ioutil.ReadAll(response.Body)
 	if err != nil {
 		return err
@@ -97,7 +97,7 @@ func (api *DiscovergyAPI) NewToken() error {
 	api.Oauth_RequestToken = requestToken
 	api.Oauth_RequestSecret = requestSecret
 
-	fmt.Printf("%s \n", "Obtain request token")
+	loggerConfig.ZapLogger.Debugf("%s", "Obtain request token")
 
 	//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	//+ https://api.discovergy.com/docs/#/OAuth1/getConsumerCredentials
@@ -105,8 +105,8 @@ func (api *DiscovergyAPI) NewToken() error {
 	//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	authorizationURL, err := oauth1.AuthorizationURL(requestToken)
 	if err != nil {
-		fmt.Printf("authorizationURL: %s\n", authorizationURL)
-		fmt.Printf("authorizationURL Error: %s", err.Error())
+		loggerConfig.ZapLogger.Errorf("authorizationURL: %s", authorizationURL)
+		loggerConfig.ZapLogger.Errorf("authorizationURL Error: %s", err.Error())
 	}
 
 	client := &http.Client{
@@ -116,7 +116,7 @@ func (api *DiscovergyAPI) NewToken() error {
 	req, err := http.NewRequest(http.MethodGet, authorizationURL.String(), nil)
 
 	if err != nil {
-		println(err)
+		loggerConfig.ZapLogger.Error(err)
 	}
 
 	req.ParseForm()
@@ -124,7 +124,7 @@ func (api *DiscovergyAPI) NewToken() error {
 	resp, err := client.Do(req)
 
 	if err != nil {
-		log.Fatal("Failed:  ", err)
+		loggerConfig.ZapLogger.Fatal("Failed:  ", err)
 	}
 	bodyBytes, _ := io.ReadAll(resp.Body)
 
@@ -134,7 +134,7 @@ func (api *DiscovergyAPI) NewToken() error {
 	if values[0] == "oauth_verifier" {
 		api.Oauth_Verifier = values[1]
 	}
-	fmt.Printf("%s \n", "Obtain verifier")
+	loggerConfig.ZapLogger.Debugf("%s", "Obtain verifier")
 
 	//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	//+ https://api.discovergy.com/docs/#/OAuth1/getConsumerCredentials
@@ -143,13 +143,13 @@ func (api *DiscovergyAPI) NewToken() error {
 	accessToken, accessSecret, err := oauth1.AccessToken(requestToken, requestSecret, api.Oauth_Verifier)
 
 	if err != nil {
-		println("Error: oauth1.AccessToken ")
-		log.Fatal("Failed:  ", err)
+		loggerConfig.ZapLogger.Error("Error: oauth1.AccessToken ")
+		loggerConfig.ZapLogger.Fatal("Failed:  ", err)
 	}
 
 	api.Oauth_AccessToken = accessToken
 	api.Oauth_AccessSecret = accessSecret
-	fmt.Printf("%s \n", "Obtain AccessToken")
+	loggerConfig.ZapLogger.Debugf("%s", "Obtain AccessToken")
 	_ = api.SaveToFile()
 	return nil
 }

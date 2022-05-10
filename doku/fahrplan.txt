@@ -5,7 +5,21 @@ dev-20220402
 dev-20220420
   - discovergy Sleeptime Config
 
-Ideen
+Features:
+F-20220427-01
   - TestDiscovergyAPI -> FetchElectricityMeter
-  - all: Logging neu
+F-20220427-02
+  - FetchElectricityMeter: Logging neu
+F-20220427-03
   - power_util Object als Basis
+  -- 
+F-20220427-04
+  - FetchKostalData: Logging neu
+F-20220527-05
+  - Golang Tests integrieren
+F-20220427-06
+  - Umstellung auf Docker
+
+Bugs:
+B-20220427-01
+  -Discovergy: Error: SaveJsonOracleDB() - SaveJsonOracleDB - http_status: 400 Error: 400 Bad Request Doppelte Messzeiten

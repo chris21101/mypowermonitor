@@ -1,0 +1,4 @@
+2022-04-27T11:01:23.547+0200	DEBUG	Trying to hit GET request for www.google.com
+2022-04-27T11:01:23.581+0200	ERROR	Error fetching URL www.google.com : Error = Get "www.google.com": unsupported protocol scheme ""
+2022-04-27T11:01:23.581+0200	DEBUG	Trying to hit GET request for http://www.google.com
+2022-04-27T11:01:23.695+0200	INFO	Success! statusCode = 200 OK for URL http://www.google.com

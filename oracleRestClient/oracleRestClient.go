@@ -10,6 +10,8 @@ import (
 	"net/url"
 	"strings"
 	"time"
+
+	"example.com/mypowermonitor/power_util"
 )
 
 type OracleRestJsonRequest struct {
@@ -28,6 +30,12 @@ type OracleTokenRequest struct {
 	Aouthurl     string `json:"aouthurl"`
 	ClientID     string `json:"client_id"`
 	ClientSecret string `json:"client_secret"`
+}
+
+var loggerConfig *power_util.LoggerConfig
+
+func (r *OracleRestJsonRequest) Set_LoggerConfig(p_logger *power_util.LoggerConfig) {
+	loggerConfig = p_logger
 }
 
 func (r *OracleRestJsonRequest) GetOracleDBtoken(tr OracleTokenRequest) (string, error) {
@@ -61,7 +69,7 @@ func (r *OracleRestJsonRequest) GetOracleDBtoken(tr OracleTokenRequest) (string,
 
 	resp, err := http.DefaultClient.Do(req)
 	if err != nil {
-		fmt.Printf("++++++++++++++++++++ ERROR Do Req: %s\n", err)
+		loggerConfig.ZapLogger.Errorf("++++++++++++++++++++ ERROR Do Req: %s", err)
 		return "", err
 	}
 	defer resp.Body.Close()
@@ -100,7 +108,7 @@ func (r *OracleRestJsonRequest) SaveJsonOracleDB(jstring string) error {
 		}
 
 		r.Oauthtoken = newtoken
-		fmt.Printf("++++++++++++++++++++ Get New Oracle TOKEN:%s\n\n", r.Oauthtoken)
+		loggerConfig.ZapLogger.Infof("Get New Oracle TOKEN:%s", r.Oauthtoken)
 	}
 	client := &http.Client{
 		Timeout: 10 * time.Second,
@@ -109,6 +117,7 @@ func (r *OracleRestJsonRequest) SaveJsonOracleDB(jstring string) error {
 	req, err := http.NewRequest(http.MethodPost, r.AccessUrl, bytes.NewBuffer([]byte(jstring)))
 
 	if err != nil {
+		defer req.Body.Close()
 		return fmt.Errorf("SaveJsonOracleDB - new oracle post request: %v", err)
 	}
 	req.Close = true
