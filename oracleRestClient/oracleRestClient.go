@@ -117,6 +117,7 @@ func (r *OracleRestJsonRequest) SaveJsonOracleDB(jstring string) error {
 	req, err := http.NewRequest(http.MethodPost, r.AccessUrl, bytes.NewBuffer([]byte(jstring)))
 
 	if err != nil {
+		defer req.Body.Close()
 		return fmt.Errorf("SaveJsonOracleDB - new oracle post request: %v", err)
 	}
 	req.Close = true

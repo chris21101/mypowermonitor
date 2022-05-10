@@ -22,6 +22,7 @@ func main() {
 	disapi.Set_LoggerConfig(logger)
 	oracleRequest.Set_LoggerConfig(logger)
 	sugarLogger := logger.ZapLogger
+	defer sugarLogger.Sync()
 	sugarLogger.Infof("Start TestDiscovergyAPI <%s> ", os.Getenv("LogLevel"))
 
 	/*
