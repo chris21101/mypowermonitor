@@ -1,0 +1,5 @@
+Version v0.1
+ 1. Version mit Zap-Logging
+ 2. Einige Bugfixes:
+  - Discovergy erstellt neues Secret beim starten
+  - Einige Segmentation Errors behoben
