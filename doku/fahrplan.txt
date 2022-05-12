@@ -1,9 +1,13 @@
+dev-20220510
+  - F-20220427-01 TestDiscovergyAPI -> FetchElectricityMeter
+  - Tageswerte einlesen. Lücken auf tagesbasis lösen
+  
+dev-20220420
+  - discovergy Sleeptime Config
+
 dev-20220402
   - Kostal: Config umstellen
   - Kostal: Sleeptime Config
-
-dev-20220420
-  - discovergy Sleeptime Config
 
 Features:
 F-20220427-01
