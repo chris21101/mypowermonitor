@@ -1,9 +1,15 @@
-dev-20220402
-  - Kostal: Config umstellen
-  - Kostal: Sleeptime Config
+dev-20220510
+  - F-20220427-01 TestDiscovergyAPI -> FetchElectricityMeter
+  B-20220427-01
+  -Discovergy: Error: SaveJsonOracleDB() - SaveJsonOracleDB - http_status: 400 Error: 400 Bad Request Doppelte Messzeiten
+  - Tageswerte einlesen. Lücken auf Tagesbasis lösen
 
 dev-20220420
   - discovergy Sleeptime Config
+
+dev-20220402
+  - Kostal: Config umstellen
+  - Kostal: Sleeptime Config
 
 Features:
 F-20220427-01
