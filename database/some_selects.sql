@@ -205,3 +205,7 @@ CREATE INDEX inverter_rest_idx2 ON
   );
 
 --delete from discovergy_rest where measure_time < to_date('01.04.2022','DD.MM.YYYY');
+
+select to_char(MEASURE_TIME,'YYYYMMDD') tag , max(TOTAL_ENERGIE), min(total_energie), max(DAILY_ENERGIE), count(*) from inverter_rest 
+where to_char(MEASURE_TIME,'HH24') > 5
+group by to_char(MEASURE_TIME,'YYYYMMDD') order by 1 desc;

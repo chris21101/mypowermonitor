@@ -124,12 +124,13 @@ func (r *OracleRestJsonRequest) SaveJsonOracleDB(jstring string) error {
 	req.Header.Set("Authorization", r.Oauthtoken)
 	req.Header.Set("Content-Type", "application/json")
 	resp, err := client.Do(req)
-	if err != nil {
+	if resp != nil {
 		defer resp.Body.Close()
-		return fmt.Errorf("SaveJsonOracleDB - client.Do(req): %v http_status: %s", err, resp.Status)
 	}
 
-	defer resp.Body.Close()
+	if err != nil {
+		return fmt.Errorf("SaveJsonOracleDB - client.Do(req): %v http_status: %s", err, resp.Status)
+	}
 
 	r.Status = resp.Status
 	r.StatusCode = resp.StatusCode

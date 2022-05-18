@@ -29,3 +29,9 @@ F-20220427-06
 Bugs:
 B-20220427-01
   -Discovergy: Error: SaveJsonOracleDB() - SaveJsonOracleDB - http_status: 400 Error: 400 Bad Request Doppelte Messzeiten
+
+
+https://api.discovergy.com/public/v1/readings?meterId=345598f062f64a5196b556d5d2a50746&from=1651356001&resolution=one_day
+https://api.discovergy.com/public/v1/readings?meterId=345598f062f64a5196b556d5d2a50746&from=1651356001&to=1651874401&resolution=one_day
+
+curl -X GET "https://api.discovergy.com/public/v1/readings?meterId=345598f062f64a5196b556d5d2a50746&from=1651356001&to=1651874401&resolution=one_day" -H  "accept: application/json"

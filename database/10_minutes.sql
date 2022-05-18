@@ -6,7 +6,7 @@ SELECT
   round(kos.actual_energie, 2)                           AS pv_leistung,
   kos.produktion - dis.einspeisung                       AS eigenverbrauch,
   ( kos.produktion - dis.einspeisung ) + dis.bezug       AS gesamtverbrauch,
-  CASE
+   CASE
     WHEN kos.produktion > 0 THEN
       round((kos.produktion - dis.einspeisung) / kos.produktion * 100, 0)
     ELSE
