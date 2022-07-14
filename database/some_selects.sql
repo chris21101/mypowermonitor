@@ -125,12 +125,13 @@ SELECT
   dis.bezug,
   dis.einspeisung,
   kos.produktion,
-  kos.produktion - dis.einspeisung                                                    AS eigenverbrauch,
-  ( kos.produktion - dis.einspeisung ) + dis.bezug                                    AS gesamtverbrauch,
-  round((kos.produktion - dis.einspeisung) / kos.produktion * 100, 0)                 AS prozent_eigenverbrauch,
-  ( 1 - round(dis.bezug /((kos.produktion - dis.einspeisung) + dis.bezug), 2) ) * 100 AS prozent_autakie,
-  round((dis.bezug * 0.29) -(dis.einspeisung * 0.13), 2)                              AS arbeitskosten,
-  round(dis.bezug * 0.29, 2)                             AS bezugskosten
+  kos.produktion - dis.einspeisung                                                                                   AS eigenverbrauch,
+  ( kos.produktion - dis.einspeisung ) + dis.bezug                                                                   AS gesamtverbrauch,
+  round((kos.produktion - dis.einspeisung) / kos.produktion * 100, 0)                                                AS prozent_eigenverbrauch,
+  ( 1 - round(dis.bezug /((kos.produktion - dis.einspeisung) + dis.bezug), 2) ) * 100                                AS prozent_autakie,
+  round((dis.bezug * 0.29) -(dis.einspeisung * 0.13), 2)                                                             AS arbeitskosten,
+  round(round((dis.bezug * 0.29) -(dis.einspeisung * 0.13), 2) /((kos.produktion - dis.einspeisung) + dis.bezug), 2) AS arbeitskostenprokwh,
+  round(dis.bezug * 0.29, 2)                                                                                         AS bezugskosten
 FROM
        (
     SELECT
@@ -155,19 +156,19 @@ FROM
   ) kos ON ( kos.tag = dis.tag )
 ORDER BY
   tag DESC;
-  
 -- Monat
 SELECT
   dis.monat,
   dis.bezug,
   dis.einspeisung,
   kos.produktion,
-  kos.produktion - dis.einspeisung                                                    AS eigenverbrauch,
-  ( kos.produktion - dis.einspeisung ) + dis.bezug                                    AS gesamtverbrauch,
-  round((kos.produktion - dis.einspeisung) / kos.produktion * 100, 0)                 AS prozent_eigenverbrauch,
-  ( 1 - round(dis.bezug /((kos.produktion - dis.einspeisung) + dis.bezug), 2) ) * 100 AS prozent_autakie,
-  round((dis.bezug * 0.29) -(dis.einspeisung * 0.13), 2)                              AS arbeitskosten,
-  round(dis.bezug * 0.29, 2)                                                          AS bezugskosten
+  kos.produktion - dis.einspeisung                                                                           AS eigenverbrauch,
+  ( kos.produktion - dis.einspeisung ) + dis.bezug                                                           AS gesamtverbrauch,
+  round((kos.produktion - dis.einspeisung) / kos.produktion * 100, 0)                                        AS prozent_eigenverbrauch,
+  ( 1 - round(dis.bezug /((kos.produktion - dis.einspeisung) + dis.bezug), 2) ) * 100                        AS prozent_autakie,
+  round((dis.bezug * 0.29) -(dis.einspeisung * 0.13), 2)                                                     AS arbeitskosten,
+  round(((dis.bezug * 0.29) -(dis.einspeisung * 0.13)) /((kos.produktion - dis.einspeisung) + dis.bezug), 2) AS arbeitskosten_pro_kwh,
+  round(dis.bezug * 0.29, 2)                                                                                 AS bezugskosten
 FROM
        (
     SELECT
@@ -189,8 +190,7 @@ FROM
       to_char(measure_time, 'YYYYMM')
   ) kos ON ( kos.monat = dis.monat )
 ORDER BY
-  monat ASC;
-
+  monat DESC;
 DROP INDEX inverter_rest_idx1;
 
 CREATE INDEX inverter_rest_idx1 ON

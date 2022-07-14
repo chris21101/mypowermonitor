@@ -16,9 +16,9 @@ select lower(user) user_name,
   regexp_replace(sys_context('USERENV','DB_NAME'),'(^..).*','\10')|| sys_context('USERENV','INSTANCE') instance_name
 from dual;
     
-set sqlprompt "&&user_name.@&&db_unique_name>"
+set sqlprompt "&&user_name.@powermonitor_prod>"
 
-HOST TITLE &&user_name@&&db_unique_name
+HOST TITLE &&user_name@powermonitor_prod
 
 DEFINE BASEDIR="C:\Users\cblank\git_repos\DBA_Day\scripts"
 DEFINE ETCDIR=&&BASEDIR.\etc

@@ -1,5 +1,6 @@
+set cloudconfig c:\Users\cblank\Documents\Oracle\network\Wallet_DB20220530142315.zip
 
-connect powermonitor_dev/222Fin_Ott222@db202110152122_medium
+connect powermonitor/222Fin_Ott222@db20220530142315_medium
 
 set termout off
 col user_name new_value user_name
@@ -16,9 +17,9 @@ select lower(user) user_name,
   regexp_replace(sys_context('USERENV','DB_NAME'),'(^..).*','\10')|| sys_context('USERENV','INSTANCE') instance_name
 from dual;
     
-set sqlprompt "&&user_name.@&&db_unique_name>"
+set sqlprompt "&&user_name.@powermonitor_dev>"
 
-HOST TITLE &&user_name@&&db_unique_name
+HOST TITLE &&user_name@powermonitor_dev
 
 DEFINE BASEDIR="C:\Users\cblank\git_repos\DBA_Day\scripts"
 DEFINE ETCDIR=&&BASEDIR.\etc
