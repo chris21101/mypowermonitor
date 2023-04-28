@@ -4,7 +4,7 @@ SELECT
   dis.bezug                                              AS bezug,
   dis.einspeisung                                        AS einspeisung,
   kos.produktion                                         AS produktion,
-  round(kos.actual_energie,2)                                     AS PV_Leistung,
+  round(kos.actual_energie, 2)                           AS pv_leistung,
   kos.produktion - dis.einspeisung                       AS eigenverbrauch,
   ( kos.produktion - dis.einspeisung ) + dis.bezug       AS gesamtverbrauch,
   CASE
@@ -67,7 +67,7 @@ SELECT
   dis.bezug                                                                           AS bezug,
   dis.einspeisung                                                                     AS einspeisung,
   kos.produktion                                                                      AS produktion,
-  round(kos.actual_energie,0)  as Durchschnitt_PV_Leistung,
+  round(kos.actual_energie, 0)                                                        AS durchschnitt_pv_leistung,
   kos.produktion - dis.einspeisung                                                    AS eigenverbrauch,
   ( kos.produktion - dis.einspeisung ) + dis.bezug                                    AS gesamtverbrauch,
   CASE
@@ -95,20 +95,20 @@ FROM
   JOIN (
     SELECT
       to_char(i.measure_time, 'YYYYMMDDHH24')     AS stunde,
-      avg(i.actual_energie) as actual_energie,
+      AVG(i.actual_energie)                       AS actual_energie,
       MAX(i.daily_energie) - MIN(i.daily_energie) AS produktion
     FROM
       -- inverter_rest 
       (
         SELECT
-          measure_time,
+          inverter_rest.measure_time,
           inverter_rest.actual_energie,
           CASE
-            WHEN to_number(to_char(measure_time, 'HH24')) > 0
-                 AND to_number(to_char(measure_time, 'HH24')) < 6 THEN
+            WHEN to_number(to_char(inverter_rest.measure_time, 'HH24')) > 0
+                 AND to_number(to_char(inverter_rest.measure_time, 'HH24')) < 6 THEN
               0
             ELSE
-              daily_energie
+              inverter_rest.daily_energie
           END AS daily_energie
         FROM
           inverter_rest
@@ -127,7 +127,12 @@ SELECT
   kos.produktion,
   kos.produktion - dis.einspeisung                                                                                   AS eigenverbrauch,
   ( kos.produktion - dis.einspeisung ) + dis.bezug                                                                   AS gesamtverbrauch,
-  round((kos.produktion - dis.einspeisung) / kos.produktion * 100, 0)                                                AS prozent_eigenverbrauch,
+  CASE
+    WHEN kos.produktion != 0 THEN
+      round((kos.produktion - dis.einspeisung) / kos.produktion * 100, 0)
+    ELSE
+      0
+  END                                                                                                                AS prozent_eigenverbrauch,
   ( 1 - round(dis.bezug /((kos.produktion - dis.einspeisung) + dis.bezug), 2) ) * 100                                AS prozent_autakie,
   round((dis.bezug * 0.29) -(dis.einspeisung * 0.13), 2)                                                             AS arbeitskosten,
   round(round((dis.bezug * 0.29) -(dis.einspeisung * 0.13), 2) /((kos.produktion - dis.einspeisung) + dis.bezug), 2) AS arbeitskostenprokwh,
@@ -191,6 +196,7 @@ FROM
   ) kos ON ( kos.monat = dis.monat )
 ORDER BY
   monat DESC;
+
 DROP INDEX inverter_rest_idx1;
 
 CREATE INDEX inverter_rest_idx1 ON
@@ -206,6 +212,17 @@ CREATE INDEX inverter_rest_idx2 ON
 
 --delete from discovergy_rest where measure_time < to_date('01.04.2022','DD.MM.YYYY');
 
-select to_char(MEASURE_TIME,'YYYYMMDD') tag , max(TOTAL_ENERGIE), min(total_energie), max(DAILY_ENERGIE), count(*) from inverter_rest 
-where to_char(MEASURE_TIME,'HH24') > 5
-group by to_char(MEASURE_TIME,'YYYYMMDD') order by 1 desc;
+SELECT
+  to_char(measure_time, 'YYYYMMDD') tag,
+  MAX(total_energie),
+  MIN(total_energie),
+  MAX(daily_energie),
+  COUNT(*)
+FROM
+  inverter_rest
+WHERE
+  to_char(measure_time, 'HH24') > 5
+GROUP BY
+  to_char(measure_time, 'YYYYMMDD')
+ORDER BY
+  1 DESC;
