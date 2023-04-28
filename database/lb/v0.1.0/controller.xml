@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<databaseChangeLog
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.9.xsd">
+  <include file="sequence/inverter_rest_seq2_sequence.xml"/> 
+  <include file="sequence/discovergy_rest_seq_sequence.xml"/> 
+  <include file="table/discovergy_rest_table.xml"/> 
+  <include file="table/powermonitor_log_table.xml"/> 
+  <include file="table/inverter_rest_table.xml"/> 
+  <include file="function/get_group_date_string_function.xml"/> 
+  <include file="index/inverter_rest_idx2_index.xml"/> 
+  <include file="index/discovergy_rest_u1_index.xml"/> 
+  <include file="trigger/discaovergy_rest_pk_trg_trigger.xml"/> 
+  <include file="trigger/inverter_rest_trg2_trigger.xml"/> 
+</databaseChangeLog> 

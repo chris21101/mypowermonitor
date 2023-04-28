@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset='UTF-8'>
+
+  <title>Result Data</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+  <style>
+  * {
+    margin: 0;
+    padding: 0;
+  }
+  body {
+    font: 14px/1.4 Palatino, Serif;
+  }
+
+  /*
+  Generic Styling, for Desktops/Laptops
+  */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  /* Zebra striping */
+  tr:nth-of-type(odd) {
+    background: #eee;
+  }
+  th {
+    background: #333;
+    color: white;
+    font-weight: bold;
+  }
+  td, th {
+    padding: 6px;
+    border: 1px solid #9B9B9B;
+    text-align: left;
+  }
+  @media
+  only screen and (max-width: 760px),
+  (min-device-width: 768px) and (max-device-width: 1024px)  {
+    table, thead, tbody, th, td, tr { display: block; }
+    thead tr { position: absolute;top: -9999px;left: -9999px;}
+    tr { border: 1px solid #9B9B9B; }
+    td { border: none;border-bottom: 1px solid #9B9B9B; position: relative;padding-left: 50%; }
+
+    td:before { position: absolute;top: 6px;left: 6px;width: 45%; padding-right: 10px; white-space: nowrap;}
+
+    /*
+    Label the data
+    */
+td:nth-of-type(1):before { content: "MEASURE_TIME"; }
+td:nth-of-type(2):before { content: "ENERGYOUT"; }
+td:nth-of-type(3):before { content: "ENERGY"; }
+td:nth-of-type(4):before { content: "ACT_POWER"; }
+td:nth-of-type(5):before { content: "CLIENTNAME"; }
+  }
+
+  /* Smartphones (portrait and landscape) ----------- */
+  @media only screen
+  and (min-device-width : 320px)
+  and (max-device-width : 480px) {
+    body {
+      padding: 0;
+      margin: 0;
+      width: 320px; }
+    }
+
+  /* iPads (portrait and landscape) ----------- */
+  @media only screen and (min-device-width: 768px) and (max-device-width: 1024px) {
+    body {
+      width: 495px;
+    }
+  }
+
+  </style>
+  <!--<![endif]-->
+<script type="text/javascript">
+
+function search(){
+
+  var s = document.getElementById('search').value;
+
+  rows = document.getElementById('data').getElementsByTagName('TR');
+  for(var i=0;i<rows.length;i++){
+    if ( rows[i].textContent.indexOf(s)>0  || s.length==0 ) {
+	  rows[i].style.display ='';
+    } else {
+      rows[i].style.display ='none';
+    }
+  }
+}
+
+
+var timer;
+function delayedSearch() {
+	clearTimeout(timer);
+	console.log('delay-ing')
+    timer = setTimeout(function () {
+		console.log('delay-running')
+		search();
+    }, 500);
+  }</script>
+</head>
+
+<body>
+<div><input type="text" size="30" maxlength="1000" value="" id="search" onkeyup="delayedSearch();" /><input type="button" value="Go" onclick="lsearch();"/> </div>
+<table><thead><tr>	<th>MEASURE_TIME</th>
+	<th>ENERGYOUT</th>
+	<th>ENERGY</th>
+	<th>ACT_POWER</th>
+	<th>CLIENTNAME</th>
+</tr></thead>
+<tbody id="data">
+
+	<tr>
+<td>2022-05-01T20:09:35</td>
+<td align="right">128211661592000</td>
+<td align="right">158245672414000</td>
+<td align="right">4206470</td>
+<td>discovergy_ws</td>
+	</tr>
+</tbody></table><!-- SQL:
+select MEASURE_TIME , energyout, energy, act_power, clientname from discovergy_rest where rownum<2--></body></html>
+
+1 Zeile ausgewählt.
+
+SQL_ID: 2117b16h5538x

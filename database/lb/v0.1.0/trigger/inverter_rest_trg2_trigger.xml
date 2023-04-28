@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog 
+	xmlns="http://www.liquibase.org/xml/ns/dbchangelog" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:n0="http://www.oracle.com/xml/ns/dbchangelog-ext" 
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog 
+	http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.9.xsd">
+	<changeSet id="31237123fe2ffb4ac04af64204cc8c6f8bc6c4a9" author="(POWERMONITOR)-Generated" failOnError="false"    >
+		<n0:createOracleTrigger objectName="INVERTER_REST_TRG2" objectType="TRIGGER" ownerName="POWERMONITOR"   >
+			<n0:source><![CDATA[
+  CREATE OR REPLACE EDITIONABLE TRIGGER "POWERMONITOR"."INVERTER_REST_TRG2" 
+before insert on inverter_rest 
+for each row 
+begin  
+   if inserting then 
+      if :NEW."ID" is null then 
+         select INVERTER_REST_SEQ2.nextval into :NEW."ID" from dual; 
+      end if; 
+   end if; 
+end;
+
+/
+ALTER TRIGGER "POWERMONITOR"."INVERTER_REST_TRG2" ENABLE]]></n0:source>
+		</n0:createOracleTrigger>
+	</changeSet>
+</databaseChangeLog>

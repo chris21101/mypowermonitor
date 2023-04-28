@@ -1,0 +1,13 @@
+HTTP/1.1 401 Unauthorized
+Date: Tue, 31 May 2022 18:00:49 GMT
+Content-Type: application/problem+json
+Content-Length: 193
+Connection: keep-alive
+
+
+{
+    "code": "Unauthorized",
+    "message": "Unauthorized",
+    "type": "tag:oracle.com,2020:error/Unauthorized",
+    "instance": "tag:oracle.com,2020:ecid/934c7af20d7475e40da39e3076a697b4"
+}

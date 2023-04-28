@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog 
+	xmlns="http://www.liquibase.org/xml/ns/dbchangelog" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:n0="http://www.oracle.com/xml/ns/dbchangelog-ext" 
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog 
+	http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.9.xsd">
+	<changeSet id="0ed2c3cadbec053b09fa15fc3000d02fd687f0b6" author="(POWERMONITOR)-Generated" failOnError="false"    >
+		<n0:createOracleFunction objectName="GET_GROUP_DATE_STRING" objectType="FUNCTION" ownerName="POWERMONITOR"   >
+			<n0:source><![CDATA[
+  CREATE OR REPLACE EDITIONABLE FUNCTION "POWERMONITOR"."GET_GROUP_DATE_STRING" (
+  p_date   IN DATE,
+  p_minute IN NUMBER DEFAULT 5
+) RETURN VARCHAR2 AS
+BEGIN
+  RETURN to_char(p_date, 'YYYYMMDDHH24')
+         || to_char(floor((to_number((to_char(p_date, 'MI'))) / p_minute)) * p_minute, 'fm00');
+END get_group_date_string;]]></n0:source>
+		</n0:createOracleFunction>
+	</changeSet>
+</databaseChangeLog>
