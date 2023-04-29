@@ -1,8 +1,10 @@
 {
     "ClientName": "solar_dev_ws",
     "Filename": "config_solar_dev_ws.json",
-    "SolarServer":  "http://192.168.178.86",
-    "SleepTime" : 5,
+    "Hostname":  "192.168.178.86",
+    "Port": 1502,
+    "SlaveId": 1,
+    "ConnectionTimeout" : 10,
     "OracleDB": {
         "Aouthurl": "https://h4de06bp7uxfolh-db202110152122.adb.eu-frankfurt-1.oraclecloudapps.com/ords/pm_dev/oauth/token",
         "ClientID": "Mp5fiHzw0fXVZtKyzb6Vdg..",

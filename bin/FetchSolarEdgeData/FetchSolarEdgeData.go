@@ -5,13 +5,14 @@ import (
 	"os"
 	"time"
 
-	"example.com/mypowermonitor/kostalinverter"
 	"example.com/mypowermonitor/oracleRestClient"
 	"example.com/mypowermonitor/power_util"
+	"example.com/mypowermonitor/solaredgeinverter"
+	modbus "github.com/stefannilsson/solaredgedc/poller"
 )
 
 func main() {
-	var kostalapi kostalinverter.KostalAPI
+	var solarlapi solaredgeinverter.SolarAPI
 	var oracleRequest oracleRestClient.OracleRestJsonRequest
 	/*
 		oracleRequest := oracleRestClient.OracleRestJsonRequest{
@@ -22,25 +23,31 @@ func main() {
 			Oauthtoken:   "",
 		}
 	*/
-	_ = kostalapi.CheckOsEnv()
+	_ = solarlapi.CheckOsEnv()
 	logger := power_util.NewLoggerConfig(os.Getenv("LogLevel"), "CONSOLE", "")
-	kostalapi.Set_LoggerConfig(logger)
+	solarlapi.Set_LoggerConfig(logger)
 	oracleRequest.Set_LoggerConfig(logger)
 	sugarLogger := logger.ZapLogger
 	defer sugarLogger.Sync()
-	sugarLogger.Infof("Start FetchKostalData <%s> ", os.Getenv("LogLevel"))
+	sugarLogger.Infof("Start FetchSolarEdgeData <%s> ", os.Getenv("LogLevel"))
 
-	_ = kostalapi.ReadConfigFromFile()
+	_ = solarlapi.ReadConfigFromFile()
 
-	oracleRequest.AccessUrl = kostalapi.Config.OracleDB.AccessUrl
-	oracleRequest.Aouthurl = kostalapi.Config.OracleDB.Aouthurl
-	oracleRequest.ClientID = kostalapi.Config.OracleDB.ClientID
-	oracleRequest.ClientSecret = kostalapi.Config.OracleDB.ClientSecret
+	oracleRequest.AccessUrl = solarlapi.Config.OracleDB.AccessUrl
+	oracleRequest.Aouthurl = solarlapi.Config.OracleDB.Aouthurl
+	oracleRequest.ClientID = solarlapi.Config.OracleDB.ClientID
+	oracleRequest.ClientSecret = solarlapi.Config.OracleDB.ClientSecret
 
 	var j = 0
 
+	modbusClient := modbus.NewPoller(&modbus.ModbusConfiguration{
+		Hostname: solarlapi.Config.Hostname,
+		Port:     solarlapi.Config.Port,
+		SlaveId:  1,
+	})
+
 	for {
-		mDate, err := kostalapi.FetchKostalValue()
+		mDate, err := solarlapi.FetchSolarValue(modbusClient)
 
 		if err != nil {
 			sugarLogger.Errorf("%s", err)
@@ -76,11 +83,10 @@ func main() {
 				}
 			}
 		}
-
 		if mDate.Aktuell == 0 {
 			time.Sleep(time.Duration(60) * time.Second)
 		} else {
-			sleepTime := kostalapi.Config.SleepTime
+			sleepTime := solarlapi.Config.ConnectionTimeout
 			time.Sleep(time.Duration(sleepTime) * time.Second)
 		}
 	}
